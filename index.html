@@ -1,21 +1,149 @@
 <!DOCTYPE html>
-<html>
-  <head>
- </head>
-  <body ng-app="app">
-    <h1>Mapa con AngularJS and Google Maps API</h1>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa Interactivo de Paraguay</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            background-color: #009999;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 300px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            z-index: 10;
+        }
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+        map {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .city-list {
+            list-style: none;
+            padding: 0;
+        }
+        .city-item {
+            padding: 10px;
+            background-color: white;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            border-left: 4px solid transparent;
+        }
+        .city-item:hover {
+            background-color: #e0f2f2;
+            border-left: 4px solid #009999;
+        }
+        .city-item h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #333;
+        }
+        .btn-reset {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #FF9933;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .btn-reset:hover {
+            background-color: #e68a00;
+        }
+        .info-window {
+            padding: 10px;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body ng-app="app">
 
-    <div ng-controller="MapsController as maps">
-      <map ng-title="Mapa de Paraguay" role="alert" center="-23.4347092,-58.4483504" zoom="6" disable-default-u-i="true"
-        styles="[{
-        stylers:[{hue:'#009999'},{visibility:'visible'},{gamma:0.5},{weight:0.5}]},{elementType:'labels',stylers:[{visibility:'on'}]},{featureType:'water',
-        stylers:[{color:'#FF9933'}]}
-        ]"></map>
+    <header>
+        <h1>Explora Paraguay</h1>
+    </header>
+
+    <div class="container" ng-controller="MapsController as maps">
+        <div class="sidebar">
+            <input type="text" class="search-box" placeholder="Buscar ciudad..." ng-model="maps.searchText">
+
+            <ul class="city-list">
+                <li class="city-item" ng-repeat="ciudad in maps.ciudades | filter:maps.searchText" ng-click="maps.seleccionarDesdeLista(ciudad)">
+                    <h3>{{ciudad.nombre}}</h3>
+                </li>
+            </ul>
+
+            <button class="btn-reset" ng-click="maps.resetearMapa()">Ver todo el país</button>
+
+            <div style="margin-top: 20px;">
+                <label>Tipo de Mapa:</label>
+                <select ng-model="maps.mapTypeId" class="search-box" style="margin-top: 5px;" ng-change="maps.cambiarTipoMapa()">
+                    <option value="ROADMAP">Normal</option>
+                    <option value="SATELLITE">Satélite</option>
+                    <option value="HYBRID">Híbrido</option>
+                    <option value="TERRAIN">Terreno</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <map center="-23.4347092,-58.4483504" zoom="6" map-type-id="{{maps.mapTypeId}}"
+                 styles="[{stylers:[{hue:'#009999'},{visibility:'visible'},{gamma:0.5},{weight:0.5}]},{elementType:'labels',stylers:[{visibility:'on'}]},{featureType:'water',stylers:[{color:'#FF9933'}]}]">
+
+                <marker ng-repeat="ciudad in maps.ciudades | filter:maps.searchText"
+                        id="m{{ciudad.id}}"
+                        position="[{{ciudad.lat}}, {{ciudad.lng}}]"
+                        title="{{ciudad.nombre}}"
+                        on-click="maps.mostrarCiudad(ciudad)">
+                </marker>
+
+                <info-window id="foo-iw">
+                    <div class="info-window">
+                        <h3>{{maps.ciudadSeleccionada.nombre}}</h3>
+                        <p>{{maps.ciudadSeleccionada.info}}</p>
+                        <hr>
+                        <small>Coordenadas: {{maps.ciudadSeleccionada.lat}}, {{maps.ciudadSeleccionada.lng}}</small>
+                    </div>
+                </info-window>
+            </map>
+        </div>
     </div>
 
-
-
-  </body>
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script src="scripts/angular/angular.min.js"></script>
     <script src="scripts/angular-route/angular-route.js"></script>
@@ -23,5 +151,5 @@
     <script src="scripts/checklist-model/checklist-model.js"></script>
     <script src="app/app.js"></script>
     <script src="app/controllers/maps.js"></script>
-
+</body>
 </html>
