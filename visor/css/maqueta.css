@@ -1,0 +1,67 @@
+/* Maqueta 3D: la escena no lleva el degradado de cielo (lo pinta three.js) y el panel derecho es más alto. */
+#escena.maqueta { background: #cfe3f6; cursor: grab; }
+#escena.maqueta:active { cursor: grabbing; }
+
+#cabecera .boton { text-decoration: none; }
+
+#panel-maqueta {
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  width: 250px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#panel-maqueta h2 {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin: 6px 0 0;
+}
+#panel-maqueta .nota { margin: 0; font-size: 12px; opacity: 0.75; }
+#panel-maqueta .secundario { align-self: flex-start; font-size: 12px; padding: 4px 8px; }
+
+.capas, .propuestas { display: flex; flex-direction: column; gap: 4px; }
+.capa { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.propuesta { display: flex; align-items: center; gap: 6px; }
+.propuesta label { flex: 1; cursor: pointer; }
+.propuesta button { padding: 2px 7px; }
+input[type="checkbox"] { accent-color: var(--acento); width: 15px; height: 15px; }
+
+.leyenda { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; font-size: 12px; }
+.muestra { display: flex; align-items: center; gap: 6px; }
+.muestra span { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.25); flex: none; }
+
+#ayuda-maqueta {
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  left: max(12px, env(safe-area-inset-left, 0px));
+  padding: 8px 12px;
+  font-size: 12.5px;
+  max-width: 460px;
+  opacity: 0.92;
+}
+#aviso {
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  color: #ffb4a8;
+  margin: 0;
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  #panel-maqueta {
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-height: 42vh;
+  }
+  #ayuda-maqueta { display: none; }
+  .leyenda { grid-template-columns: 1fr 1fr 1fr; }
+}

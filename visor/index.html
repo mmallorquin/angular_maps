@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Casa · recorrido 3D</title>
+<link rel="stylesheet" href="css/estilos.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./lib/three.module.js",
+    "@mkkellogg/gaussian-splats-3d": "./lib/gaussian-splats-3d.module.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="escena"></div>
+<img id="foto-superpuesta" alt="">
+<div id="marco-foto"></div>
+
+<div id="carga" role="status" aria-live="polite">
+  <div>
+    <h1>Casa · recorrido 3D</h1>
+    <div class="barra"><div></div></div>
+    <p>Cargando el escaneo…</p>
+  </div>
+</div>
+
+<header id="cabecera" class="panel">
+  <h1>Casa · recorrido 3D</h1>
+  <button id="boton-mouse" title="Capturar el mouse para mirar sin arrastrar (Esc para soltar)" aria-label="Capturar el mouse">🖱️ Capturar mouse</button>
+  <button id="boton-completar" title="Mostrar u ocultar la casa de relleno (paredes, techo, hastial) que completa lo que el escaneo no captó">Completar casa</button>
+  <a class="boton" href="maqueta.html" title="Maqueta 3D del lote: formas, materiales y propuestas a futuro">Maqueta 3D</a>
+  <a class="boton" href="../index.html" title="Volver al mapa interactivo">🗺️ Mapa</a>
+  <button id="boton-cargar-ply" title="Cargar otro archivo .PLY o .KSPLAT desde tu computadora">📂 Cargar .PLY</button>
+  <input type="file" id="input-archivo-ply" accept=".ply,.ksplat" style="display:none">
+  <button id="boton-ayuda" title="Mostrar u ocultar la ayuda" aria-label="Ayuda" aria-controls="ayuda">?</button>
+</header>
+<div id="hud"></div>
+
+<aside id="lugares" class="panel">
+  <h2>Ir a</h2>
+  <div id="fichas-destinos" class="fichas"></div>
+  <h2>Comparar con la foto</h2>
+  <div id="fichas-fotos" class="fichas"></div>
+</aside>
+
+<div id="minimapa" class="panel" title="Tocá el plano para ir a ese punto"></div>
+
+<div id="ayuda" class="panel">
+  <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> caminar · arrastrar o capturar el mouse para mirar ·
+  <kbd>Shift</kbd> correr · en el celular: pulgar izquierdo camina, derecho mira · tocá el plano para saltar a un punto
+</div>
+
+<div id="comparador" class="panel" hidden>
+  <div class="fila">
+    <span class="titulo"></span>
+    <span class="fuentes">
+      <button data-fuente="foto" title="Mostrar la foto real">Foto real</button>
+      <button data-fuente="ia" title="Mostrar la vista completada con IA">Vista IA</button>
+    </span>
+    <button data-accion="cerrar" title="Cerrar la comparación" aria-label="Cerrar la comparación">✕</button>
+  </div>
+  <div class="fila">
+    <button data-accion="3d">3D</button>
+    <input type="range" min="0" max="100" value="50" aria-label="Opacidad de la foto">
+    <button data-accion="foto">Foto</button>
+    <span class="etiqueta">50%</span>
+    <button data-accion="mitad" title="Mezcla al 50 %" aria-label="Mezcla al 50 por ciento">½</button>
+  </div>
+</div>
+
+<div id="joystick"></div>
+
+<script>
+  if (!(HTMLScriptElement.supports && HTMLScriptElement.supports('importmap'))) {
+    document.querySelector('#carga p').textContent = 'Este navegador no soporta import maps. Probá con Chrome, Edge, Firefox o Safari 16.4 o más nuevo.';
+  }
+</script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

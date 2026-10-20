@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Node / NPM
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Git worktrees / temporary
+.claude/
+
+# Archivos .ply grandes sin partir (superan el límite de 100MB de GitHub)
+# El escaneo .ply completo versionado está en escaneo/casa.ply.part* (<90MB c/u)
+*.ply
+!escaneo/casa.ply.part*

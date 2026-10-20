@@ -1,27 +1,112 @@
 <!DOCTYPE html>
-<html>
-  <head>
- </head>
-  <body ng-app="app">
-    <h1>Mapa con AngularJS and Google Maps API</h1>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lote & Casa · Recorrido 3D & Mapa</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f1512; color: #eef1ea; }
+    .top-nav {
+      background: #141c18;
+      border-bottom: 1px solid #27382e;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .top-nav h1 { font-size: 1.25rem; font-weight: 600; color: #7ad196; }
+    .nav-links { display: flex; gap: 10px; }
+    .nav-btn {
+      background: #202d25;
+      color: #eef1ea;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid #2f4336;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .nav-btn:hover { background: #2a3c31; border-color: #7ad196; }
+    .nav-btn.primary { background: #1e5a38; border-color: #4eb573; color: #ffffff; }
+    .nav-btn.primary:hover { background: #267246; }
+    .hero-banner {
+      padding: 24px;
+      background: linear-gradient(180deg, #16201b 0%, #0f1512 100%);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #18231e;
+      border: 1px solid #27382e;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card h2 { font-size: 1.15rem; margin-bottom: 8px; color: #eef1ea; }
+    .card p { font-size: 0.88rem; color: #9bb0a3; margin-bottom: 16px; line-height: 1.4; }
+    .card a { align-self: flex-start; }
+    .map-section { padding: 0 24px 24px 24px; }
+    .map-section h2 { font-size: 1.1rem; margin-bottom: 12px; color: #c4d6cb; }
+    map { display: block; width: 100%; height: 500px; border-radius: 8px; border: 1px solid #27382e; }
+  </style>
+</head>
+<body ng-app="app">
+  <header class="top-nav">
+    <h1>Casa & Lote · Simulación 3D y Mapas</h1>
+    <nav class="nav-links">
+      <a class="nav-btn primary" href="visor/index.html">🏠 Abrir Recorrido 3D</a>
+      <a class="nav-btn" href="visor/maqueta.html">📐 Maqueta 3D</a>
+    </nav>
+  </header>
 
-    <div ng-controller="MapsController as maps">
-      <map ng-title="Mapa de Paraguay" role="alert" center="-23.4347092,-58.4483504" zoom="6" disable-default-u-i="true"
-        styles="[{
-        stylers:[{hue:'#009999'},{visibility:'visible'},{gamma:0.5},{weight:0.5}]},{elementType:'labels',stylers:[{visibility:'on'}]},{featureType:'water',
-        stylers:[{color:'#FF9933'}]}
-        ]"></map>
+  <section class="hero-banner">
+    <div class="card">
+      <div>
+        <h2>🏠 Recorrido 3D en Primera Persona</h2>
+        <p>Visor hiperrealista con Gaussian Splatting (a partir de <code>casa3d.ply</code>) y Three.js. Permite caminar con WASD/móvil, comparar vistas con 10 fotos reales y activar el modelo paramétrico de relleno.</p>
+      </div>
+      <a class="nav-btn primary" href="visor/index.html">Explorar Recorrido 3D →</a>
     </div>
 
+    <div class="card">
+      <div>
+        <h2>📐 Maqueta 3D Interactiva</h2>
+        <p>Maqueta volumétrica con Three.js y OrbitControls. Visualiza capas del terreno, vegetación, perímetro, propuesta de ampliación y leyenda de materiales.</p>
+      </div>
+      <a class="nav-btn" href="visor/maqueta.html">Ver Maqueta 3D →</a>
+    </div>
 
+    <div class="card">
+      <div>
+        <h2>📦 Escaneo 3D Raw (.PLY)</h2>
+        <p>El escaneo 3D original está dividido en partes de 90 MB en la carpeta <code>escaneo/</code> para sincronización con GitHub. Ejecuta <code>./escaneo/unir-ply.sh</code> para reensamblarlo.</p>
+      </div>
+      <a class="nav-btn" href="MODELO-3D-PLY.md">Ver Guía .PLY →</a>
+    </div>
+  </section>
 
-  </body>
-    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-    <script src="scripts/angular/angular.min.js"></script>
-    <script src="scripts/angular-route/angular-route.js"></script>
-    <script src="scripts/ngmap/build/scripts/ng-map.min.js"></script>
-    <script src="scripts/checklist-model/checklist-model.js"></script>
-    <script src="app/app.js"></script>
-    <script src="app/controllers/maps.js"></script>
+  <section class="map-section" ng-controller="MapsController as maps">
+    <h2>🗺️ Mapa de Ubicación</h2>
+    <map ng-title="Mapa de Paraguay" role="alert" center="-23.4347092,-58.4483504" zoom="6" disable-default-u-i="true"
+      styles="[{
+      stylers:[{hue:'#009999'},{visibility:'visible'},{gamma:0.5},{weight:0.5}]},{elementType:'labels',stylers:[{visibility:'on'}]},{featureType:'water',
+      stylers:[{color:'#FF9933'}]}
+      ]"></map>
+  </section>
 
+  <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+  <script src="scripts/angular/angular.min.js"></script>
+  <script src="scripts/angular-route/angular-route.js"></script>
+  <script src="scripts/ngmap/build/scripts/ng-map.min.js"></script>
+  <script src="scripts/checklist-model/checklist-model.js"></script>
+  <script src="app/app.js"></script>
+  <script src="app/controllers/maps.js"></script>
+</body>
 </html>

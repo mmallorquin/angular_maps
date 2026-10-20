@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Casa · maqueta 3D</title>
+<link rel="stylesheet" href="css/estilos.css">
+<link rel="stylesheet" href="css/maqueta.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./lib/three.module.js",
+    "orbit-controls": "./lib/OrbitControls.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="escena" class="maqueta"></div>
+
+<div id="carga" role="status" aria-live="polite">
+  <div>
+    <h1>Casa · maqueta 3D</h1>
+    <div class="barra"><div style="width: 60%"></div></div>
+    <p>Armando la maqueta…</p>
+  </div>
+</div>
+
+<header id="cabecera" class="panel">
+  <h1>Casa · maqueta 3D</h1>
+  <a class="boton" href="index.html" title="Volver al recorrido sobre el escaneo">← Recorrido</a>
+  <a class="boton" href="../index.html" title="Volver al mapa interactivo">🗺️ Mapa</a>
+</header>
+
+<aside id="panel-maqueta" class="panel">
+  <h2>Vistas</h2>
+  <div class="fichas">
+    <button data-vista="aerea">Aérea</button>
+    <button data-vista="frente">Frente</button>
+    <button data-vista="calle">Calle</button>
+    <button data-vista="planta">Planta</button>
+  </div>
+  <h2>Capas</h2>
+  <div id="capas" class="capas"></div>
+  <h2>Propuestas a futuro</h2>
+  <p class="nota">Arrastralas por el lote; <kbd>R</kbd> o ↻ las gira. Quedan guardadas en este navegador.</p>
+  <div id="lista-propuestas" class="propuestas"></div>
+  <button id="restablecer-propuestas" class="secundario">Restablecer</button>
+  <h2>Materiales</h2>
+  <div id="leyenda" class="leyenda"></div>
+</aside>
+
+<p id="aviso" class="panel" hidden role="alert"></p>
+
+<div id="ayuda-maqueta" class="panel">
+  Arrastrar: girar · rueda o pellizco: acercar · botón derecho o dos dedos: desplazar · medidas y posiciones aproximadas, tomadas del escaneo y de las fotos
+</div>
+
+<script>
+  if (!(HTMLScriptElement.supports && HTMLScriptElement.supports('importmap'))) {
+    document.querySelector('#carga p').textContent = 'Este navegador no soporta import maps. Probá con Chrome, Edge, Firefox o Safari 16.4 o más nuevo.';
+  }
+</script>
+<script type="module" src="js/maqueta.js"></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+{
+ "nota": "Troncos detectados en la nube de puntos (banda 1,0-2,6 m); alturas = percentil 95 de la copa. Posiciones aproximadas (±0,5 m).",
+ "arboles": [
+  {
+   "x": 1.12,
+   "z": 6.38,
+   "altura": 7.6,
+   "radioCopa": 2.6,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 0.88,
+   "z": 13.38,
+   "altura": 4.9,
+   "radioCopa": 2.5,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 0.12,
+   "z": 11.12,
+   "altura": 4.8,
+   "radioCopa": 3.1,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 7.88,
+   "z": 6.62,
+   "altura": 6.7,
+   "radioCopa": 2.2,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 5.88,
+   "z": 12.62,
+   "altura": 5.3,
+   "radioCopa": 2.8,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 18.62,
+   "z": -1.38,
+   "altura": 8.3,
+   "radioCopa": 2.9,
+   "tipo": "arbol",
+   "vecino": true
+  },
+  {
+   "x": 14.62,
+   "z": 0.62,
+   "altura": 4.9,
+   "radioCopa": 3.5,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 17.12,
+   "z": -4.88,
+   "altura": 8.2,
+   "radioCopa": 2.7,
+   "tipo": "arbol",
+   "vecino": true
+  },
+  {
+   "x": 3.62,
+   "z": 4.12,
+   "altura": 7.7,
+   "radioCopa": 3.0,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 2.12,
+   "z": 4.88,
+   "altura": 7.8,
+   "radioCopa": 3.0,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 3.88,
+   "z": 12.38,
+   "altura": 5.0,
+   "radioCopa": 2.7,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 11.62,
+   "z": -14.88,
+   "altura": 7.6,
+   "radioCopa": 3.0,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 5.88,
+   "z": -14.12,
+   "altura": 11.1,
+   "radioCopa": 2.8,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 3.88,
+   "z": 8.12,
+   "altura": 7.6,
+   "radioCopa": 2.9,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": -0.38,
+   "z": 7.38,
+   "altura": 7.5,
+   "radioCopa": 3.3,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 3.38,
+   "z": -12.62,
+   "altura": 12.0,
+   "radioCopa": 2.6,
+   "tipo": "palmera",
+   "vecino": false
+  },
+  {
+   "x": 3.38,
+   "z": 14.12,
+   "altura": 5.0,
+   "radioCopa": 2.5,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 4.12,
+   "z": 10.62,
+   "altura": 5.2,
+   "radioCopa": 3.5,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 5.88,
+   "z": 7.62,
+   "altura": 7.7,
+   "radioCopa": 1.9,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 5.12,
+   "z": -12.62,
+   "altura": 10.9,
+   "radioCopa": 2.7,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": -4.88,
+   "z": -13.12,
+   "altura": 9.1,
+   "radioCopa": 3.0,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": -0.12,
+   "z": 5.38,
+   "altura": 7.6,
+   "radioCopa": 2.6,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": -1.12,
+   "z": -11.38,
+   "altura": 8.8,
+   "radioCopa": 3.0,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 18.38,
+   "z": -5.88,
+   "altura": 8.4,
+   "radioCopa": 2.7,
+   "tipo": "arbol",
+   "vecino": true
+  },
+  {
+   "x": -0.88,
+   "z": -13.38,
+   "altura": 9.1,
+   "radioCopa": 3.0,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 19.12,
+   "z": -3.88,
+   "altura": 8.4,
+   "radioCopa": 2.4,
+   "tipo": "arbol",
+   "vecino": true
+  },
+  {
+   "x": 5.88,
+   "z": 15.12,
+   "altura": 5.8,
+   "radioCopa": 3.5,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 2.88,
+   "z": -17.88,
+   "altura": 11.6,
+   "radioCopa": 3.2,
+   "tipo": "arbol",
+   "vecino": true
+  },
+  {
+   "x": 9.88,
+   "z": -15.62,
+   "altura": 8.1,
+   "radioCopa": 3.3,
+   "tipo": "arbol",
+   "vecino": false
+  },
+  {
+   "x": 16.38,
+   "z": -7.88,
+   "altura": 7.0,
+   "radioCopa": 3.4,
+   "tipo": "arbol",
+   "vecino": true
+  },
+  {
+   "x": -6.62,
+   "z": 2.12,
+   "altura": 6.1,
+   "radioCopa": 2.8,
+   "tipo": "arbol",
+   "vecino": true
+  }
+ ]
+}

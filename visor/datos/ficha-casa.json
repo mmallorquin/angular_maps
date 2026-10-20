@@ -1,0 +1,956 @@
+{
+  "meta": {
+    "version": "1.0",
+    "fecha_relevamiento": "2026-10-18",
+    "fuente": "10 fotos reales (visor/fotos/foto-1.jpg a foto-10.jpg) + coordenadas conocidas del visor",
+    "sistema_coordenadas": "metros; X derecha, Y arriba, Z hacia abajo del plano; la calle queda hacia +Z",
+    "convenciones": {
+      "alturas": "Todas las alturas están medidas sobre el césped (Y=0) salvo que el campo diga 'sobre_piso'. El piso interior está a 0.5 m del césped; la terraza exterior a unos 0.2 m (estimado).",
+      "estimado": "estimado=true significa medida sacada a ojo de las fotos (error típico +-15 a 25 %). Sin ese flag, el dato viene del usuario o se ve directamente.",
+      "confianza": "alta = se ve claro en varias fotos; media = se ve pero escorzado u ocluido; baja = inferido o triangulado a ojo",
+      "fachadas": "SO = lado largo vidriado (S a W, mira al césped). SE = lado corto del hastial (S a E, mira a la calle). NO = lado corto (W a N). NE = lado largo trasero (N a E): NO aparece en ninguna foto.",
+      "s_m": "Distancia a lo largo de la fachada SO medida desde la esquina O (W) hacia la esquina S. Punto de mundo = W + s*(0.4665, 0.8843) (+ 0.2 m hacia afuera si es un objeto montado en el muro)."
+    },
+    "notas_geometria": [
+      "Las cuatro esquinas dadas forman un paralelogramo levemente sesgado (ángulo en S de unos 99 grados, no 90). Usarlas tal cual y no 'enderezar'.",
+      "Las poses de cámara de js/lugares.js son aproximadas; las posiciones de árboles y objetos del lote deducidas de ellas tienen confianza baja.",
+      "La 'puerta vidriada con faroles' que se ve en el borde derecho de la foto 9 no es una abertura de la pared NO: es la puerta-ventana del dormitorio de la fachada SO vista de canto (se confirma con la foto 8, donde la terraza está delante de ella). La pared NO solo muestra la ventana alta, un farol y una junta.",
+      "Faroles contados: 3 en la fachada SO (F1, F2, F3), 1 seguro en la pared NO (F4, en fotos 6 y 7 aparece en pareja por el escorzo) y 2 sobre la piedra del hastial (F5, F6). Total 6."
+    ]
+  },
+  "casa": {
+    "planta": {
+      "esquinas": { "S": [10, -1.6], "E": [15.2, -5.5], "N": [10.4, -14.6], "W": [5.2, -10.7] },
+      "largo_m": 10.3,
+      "ancho_m": 6.5,
+      "altura_alero_m": 3.3,
+      "altura_alero_sobre_piso_m": 2.8,
+      "altura_borde_alto_techo_principal_m": 4.3,
+      "altura_cumbrera_m": 5.2,
+      "altura_cumbrera_nota": "Cumbrera del hastial = punto más alto de la casa. La punta de la chimenea queda apenas por debajo (aprox. 5.1 m).",
+      "nivel_piso_m": 0.5,
+      "nivel_terraza_m": 0.2,
+      "estimado": true,
+      "confianza": "media",
+      "nota": "Alero SO 3.3 m sobre césped = 2.8 m sobre el piso interior (altura de muro bajo el alero, medida contra el ventanal de unos 2.2 m)."
+    },
+    "despiece_fachada_SO": {
+      "descripcion": "De la esquina O (s=0) a la esquina S (s=10.3). Medido sobre la foto 6 (casi frontal) y normalizado a 10.3 m. Error aprox. +-0.3 m.",
+      "tramos": [
+        {
+          "desde_s_m": 0.0,
+          "hasta_s_m": 1.8,
+          "elemento": "muro ciego blanco con un farol (F1 a s=1.5); en el extremo O hay una junta o pilastra vertical angosta (~0.3 m)"
+        },
+        {
+          "desde_s_m": 1.8,
+          "hasta_s_m": 3.75,
+          "elemento": "puerta-ventana corrediza del dormitorio, 2 hojas, marco negro, baja hasta casi el nivel de terraza"
+        },
+        { "desde_s_m": 3.75, "hasta_s_m": 4.7, "elemento": "muro ciego blanco con un farol (F2 a s=4.3)" },
+        {
+          "desde_s_m": 4.7,
+          "hasta_s_m": 9.0,
+          "elemento": "ventanal de 4 paños (1 fijo ancho + 3 corredizos) con 2 escalones al frente"
+        },
+        {
+          "desde_s_m": 9.0,
+          "hasta_s_m": 9.4,
+          "elemento": "tramito de muro blanco con farol (F3 a s=9.2) y cadena de lluvia"
+        },
+        {
+          "desde_s_m": 9.4,
+          "hasta_s_m": 10.3,
+          "elemento": "pilastra blanca rugosa del hastial (~0.9 m), con zocalo claro; sube hasta 4.4 m"
+        }
+      ],
+      "confianza": "media"
+    },
+    "despiece_fachada_NO": {
+      "descripcion": "Pared corta W a N. Casi ciega: revoque blanco liso, sin puertas.",
+      "elementos": [
+        { "elemento": "junta vertical o relieve a 1 o 2 m de la esquina O", "confianza": "baja" },
+        {
+          "elemento": "farol colonial a unos 3 m de la esquina O, a unos 2.1 m sobre el piso",
+          "confianza": "media",
+          "centro_mundo_aprox": [7.5, -12.7]
+        },
+        {
+          "elemento": "ventana alta pequeña (baño probable) cerca de la esquina N, a 1 o 1.5 m de ella",
+          "confianza": "media"
+        }
+      ],
+      "remate_superior": "El borde superior sigue la pendiente del techo: más bajo hacia la esquina O (alero 3.3 m) y más alto hacia la esquina N (4.3 m). No se ve alero lateral; la chapa termina casi a ras del muro con cenefa negra.",
+      "base": "Contra el muro hay tierra, hojarasca, tachos de pintura y una malla de alambre apoyada (objetos temporales, no modelar).",
+      "confianza": "media"
+    },
+    "fachada_NE": {
+      "visible_en_fotos": false,
+      "evidencia_indirecta": "A través del ventanal SO (fotos 6 y 10) se ve al fondo del ambiente un segundo marco negro vidriado de unos 2.0 x 2.0 m y, detrás, ladrillo visto del vecino. Es decir: hay una puerta o ventanal corredizo en la pared NE. Lo demás de esa cara es desconocido.",
+      "confianza": "baja"
+    },
+    "paredes": {
+      "material": "Mampostería revocada y pintada de blanco.",
+      "color": "#EEEEEA",
+      "color_en_sombra": "#D3D6D5",
+      "textura": "Revoque fino texturado, de grano medio (tipo salpicado), con puntitos oscuros muy chicos. La pilastra y el marco del hastial se ven más rugosos (revoque grueso a la llana) y un poco más grises (#E8E8E4). El muro NO se ve más liso y verdoso por la sombra del arbolado.",
+      "zocalo": {
+        "donde": "Visible al pie de la pilastra del hastial y del muro SO",
+        "alto_m": 0.12,
+        "color": "#CFC8B8",
+        "material": "Zocalo de revoque o cerámico claro, retranqueado unos 2 cm",
+        "estimado": true
+      },
+      "manchas": [
+        {
+          "tipo": "humedad verdosa",
+          "donde": "base del tramito de muro junto a la pilastra y esquina O, hasta 0.4 m de alto",
+          "color": "#8E9A86"
+        },
+        { "tipo": "tierra colorada salpicada", "donde": "pie de las paredes", "color": "#C79068" }
+      ],
+      "espesor_m": null,
+      "espesor_nota": "No se mide en las fotos (el marco del hastial sobresale unos 0.25 m del plano del muro SO; muros típicos 0.20 a 0.25 m)."
+    },
+    "techo": {
+      "tipo": "Una sola agua (monopitch) sobre el cuerpo principal. Cae hacia el SO (el césped) y el lado alto queda al NE.",
+      "material": "Chapa acanalada o trapezoidal prepintada, nervios en el sentido de la pendiente (perpendiculares al alero).",
+      "color": "#3A3E43",
+      "color_brillos": "#808890",
+      "pendiente": "9 grados (~15 %), cae hacia el SO",
+      "paso_nervio_aparente_m": 0.2,
+      "alero_m": 0.7,
+      "cenefa": {
+        "color": "#15171A",
+        "alto_m": 0.25,
+        "material": "Chapa negra (puede ser la canaleta)",
+        "nota": "Corre a lo largo de todo el alero SO y termina contra la pilastra del hastial; hay cadenas de lluvia en los extremos, asi que probablemente es canaleta."
+      },
+      "vigas": {
+        "visibles": true,
+        "cantidad": 5,
+        "descripcion": "Cabezas de viga negras que asoman por debajo de la cenefa, sobre el muro SO. Un par cercano (~1 m entre sí) sobre el tramo entre la puerta-ventana y el ventanal, otras sobre el ventanal cada 2.3 a 2.5 m, y una en el extremo S junto a la pilastra.",
+        "s_aprox_m": [1.4, 3.9, 4.9, 7.4, 9.7],
+        "seccion_m": [0.12, 0.1],
+        "saliente_bajo_cenefa_m": 0.1,
+        "largo_visto_m": 0.4,
+        "color": "#1A1A1A",
+        "material": "Probable madera pintada o teñida de negro",
+        "estimado": true
+      },
+      "chimenea": {
+        "forma": "Prisma cuadrado, de revoque blanco como las paredes, con tapa/sombrerete de chapa negra que sobresale unos 5 cm por lado.",
+        "color_cuerpo": "#EDEDEA",
+        "color_tapa": "#16181B",
+        "lado_m": 0.65,
+        "sobresale_del_techo_m": 0.8,
+        "punta_m_sobre_cesped": 5.1,
+        "posicion_s_m": 3.4,
+        "retranqueo_desde_borde_NE_m": 1.2,
+        "centro_mundo_aprox": [11.0, -10.9],
+        "estimado": true,
+        "confianza": "media",
+        "nota": "Pegada al borde alto del techo (lado NE). Debajo, en la cocina, hay un hueco oscuro en la pared del fondo que podría ser el hogar o parrilla (no confirmado)."
+      },
+      "pretil_blanco": {
+        "descripcion": "Bloque blanco bajo, detrás del faldón, que sobresale unos 0.5 m por encima del borde alto del techo, a continuación de la chimenea hacia el NO. Tapa negra.",
+        "desde_s_m": 1.2,
+        "hasta_s_m": 3.0,
+        "alto_sobre_borde_m": 0.5,
+        "confianza": "media",
+        "estimado": true,
+        "extra": "Otro bloque blanco con tapa negra inclinada asoma en el extremo NO de la cubierta (fotos 1, 6, 10); no se entiende si es parte del cuerpo del baño o un remate. Confianza baja."
+      },
+      "cadenas_de_lluvia": {
+        "descripcion": "Cadena fina de eslabones negros que cuelga desde el extremo del alero hasta el piso, al lado del farol.",
+        "ubicaciones_s_m": [1.5, 9.2],
+        "color": "#1F1F1F",
+        "nota": "Confianza media; en foto 1 se ven clarísimas junto a F3 y junto a F1."
+      },
+      "pendiente_grados": 9,
+      "pendiente_porcentaje": 15,
+      "pendiente_detalle": {
+        "grados": 9,
+        "porcentaje": 15,
+        "subida_m": 1.0,
+        "estimado": true,
+        "confianza": "media-baja",
+        "nota": "Sube aprox. 1.0 m entre el alero (3.3 m) y el borde alto NE (4.3 m) en 6.5 m de ancho. Con el ángulo de toma de las fotos puede ser entre 7 y 12 grados."
+      },
+      "alero_detalle": {
+        "fachada_SO": 0.7,
+        "lateral_NO": 0.0,
+        "lateral_SE": "no aplica, lo corta el hastial",
+        "borde_NE": null,
+        "estimado": true,
+        "nota": "El alero SO es el que se ve; el lado NE no aparece en ninguna foto."
+      }
+    },
+    "hastial": {
+      "posicion": "esquina S",
+      "descripcion": "Marco blanco en forma de casita (pentágono) que ocupa todo el frente SE de 6.5 m y mira a la calle. Dentro del marco, de izquierda a derecha: vidrio retranqueado, franja negra acanalada y panel de piedra.",
+      "ancho_m": 6.5,
+      "alto_m": 5.2,
+      "alto_aleros_m": 4.4,
+      "espesor_marco_en_planta_m": 1.0,
+      "espesor_nota": "Lo que se ve de costado (pilastra SO) es de unos 0.9 m; detrás, el techo principal choca contra su pared NO. No se ve cuánto se mete hacia adentro.",
+      "forma": "Pentágono simétrico: dos laterales verticales hasta 4.4 m y dos faldones a ~16 grados que se juntan en la cumbrera, en el centro del frente SE (5.2 m).",
+      "pendiente_faldones_grados": 16,
+      "estimado": true,
+      "confianza": "media",
+      "marco": {
+        "material": "Revoque grueso blanco, más rugoso que las paredes",
+        "color": "#E8E8E4",
+        "pilar_SO_ancho_m": 1.0,
+        "pilar_E_ancho_m": 0.55,
+        "banda_superior_ancho_m": 0.55,
+        "tapa_superior": { "material": "Babeta o capelo de chapa negra sobre los faldones", "color": "#15171A", "ancho_m": 0.08 },
+        "cielorraso_visible": {
+          "descripcion": "Panel liso gris muy claro bajo la banda superior, sobre el vidrio fijo (se ve desde abajo)",
+          "color": "#D8DADB"
+        },
+        "zocalo": "Igual que las paredes (0.12 m, #CFC8B8)"
+      },
+      "revestimiento": {
+        "piedra": {
+          "ubicacion": "Cara SE, panel de la derecha (lado E), de piso a faldón",
+          "ancho_m": 1.5,
+          "alto_m": "4.1 m junto a la franja negra, bajando a unos 3.5 m en el borde E (sigue el faldón)",
+          "material": "Piedra laja irregular tipo mosaico (cantos sin escuadra, juntas finas grises)",
+          "color": "#CDBBA0",
+          "variaciones": ["#D9C3AA (rosado claro)", "#BFA886 (ocre)", "#E0D2BC (crema)"],
+          "junta": "#8F8A80",
+          "relieve_m": 0.03,
+          "faroles": 2,
+          "estimado": true,
+          "confianza": "alta (material y color), media (medidas)"
+        },
+        "franja_negra": {
+          "ubicacion": "Cara SE, entre el vidrio y la piedra, de piso a faldón",
+          "ancho_m": 1.2,
+          "material": "Chapa o madera acanalada vertical, acabado mate",
+          "color": "#1C1E21",
+          "paso_nervio_m": 0.1,
+          "relieve_m": 0.05,
+          "estimado": true,
+          "confianza": "media",
+          "nota": "Parece sobresalir un poco del vidrio y quedar al ras de la piedra."
+        }
+      },
+      "carpinteria": {
+        "puerta": {
+          "tipo": "Puerta vidriada corrediza de 2 hojas, marco negro",
+          "ancho_m": 2.2,
+          "alto_m": 2.4,
+          "marco_color": "#17181A",
+          "retranqueo_vs_marco_blanco_m": 0.4
+        },
+        "vidrio_fijo_superior": {
+          "tipo": "Paño fijo trapezoidal sobre la puerta",
+          "ancho_m": 2.2,
+          "alto_desde_m": 2.4,
+          "alto_hasta_m": "3.2 m en el lado del pilar y 3.6 m en el lado de la franja negra (sigue el faldón)",
+          "vidrio": "Oscuro y reflectante, mismo vidrio gris que el ventanal"
+        },
+        "manija_o_herraje": "Se ve un herraje chico negro en el borde derecho de la puerta (foto 1 y foto 2). No hay más detalle."
+      },
+      "escalones": {
+        "cantidad": 2,
+        "material": "Mismo porcelanato crema que la terraza",
+        "color": "#E6D9BE",
+        "ancho_m": [2.4, 2.9],
+        "contrahuella_m": 0.14,
+        "huella_m": 0.3,
+        "nota": "El de arriba queda alineado con el umbral de la puerta; el de abajo es más ancho y avanza más. Se ve, entre el escalón y el piso, una cuña oscura (tierra o hueco) en foto 1."
+      },
+      "faroles": {
+        "cantidad": 2,
+        "ubicacion": "Sobre la piedra, lado a lado (~0.5 m entre sí), a unos 2.3 m sobre el piso",
+        "centro_mundo_aprox": [14.2, -4.5]
+      },
+      "despiece_SE_desde_esquina_S": {
+        "descripcion": "Distancias medidas sobre la cara SE, de la esquina S (d=0) hacia la esquina E (d=6.5). Proporciones tomadas de foto 3; error +-0.3 m.",
+        "tramos": [
+          { "desde_m": 0.0, "hasta_m": 1.0, "elemento": "pilar blanco SO (el que se ve de costado como pilastra)" },
+          {
+            "desde_m": 1.0,
+            "hasta_m": 3.2,
+            "elemento": "vidrio retranqueado: puerta corrediza + paño fijo trapezoidal"
+          },
+          { "desde_m": 3.2, "hasta_m": 4.4, "elemento": "franja negra acanalada" },
+          { "desde_m": 4.4, "hasta_m": 5.9, "elemento": "panel de piedra con 2 faroles (d=4.9 y d=5.4)" },
+          { "desde_m": 5.9, "hasta_m": 6.5, "elemento": "pilar blanco E" }
+        ]
+      }
+    },
+    "galeria": {
+      "piso": {
+        "material": "Porcelanato crema tipo travertino, formato grande (aprox. 0.6 x 0.6 m), junta fina clara",
+        "color": "#E9DCC0",
+        "color_en_sombra": "#D7C7A5",
+        "manchas": "Manchas anaranjadas de tierra colorada repartidas, sobre todo cerca del borde y al pie de los escalones (#D8A870)",
+        "estimado": true
+      },
+      "ancho_m": 2.0,
+      "ancho_nota": "Profundidad medida desde el muro SO, incluyendo escalones: 1.5 a 2.5 m. Es una terraza sin cubierta propia salvo el alero de 0.7 m. Se prolonga alrededor de la esquina S y ocupa también el frente del hastial (2 a 3 m de fondo) hasta el muro vecino del E; en la esquina O termina a unos 0.4 m pasada la esquina.",
+      "forma": "Polígono irregular, no rectangular. El borde tiene un canto de hormigón de unos 0.1 m, apenas sobre el césped.",
+      "escalones": {
+        "ubicacion": "Frente al ventanal de 4 paños (SO)",
+        "cantidad": 2,
+        "material": "Mismo porcelanato crema",
+        "ancho_m": [4.5, 5.0],
+        "contrahuella_m": 0.14,
+        "huella_m": 0.3,
+        "nota": "El escalón inferior se extiende unos 0.5 m más hacia el O que el superior (escalonado). Delante de la puerta-ventana del dormitorio no hay escalón visible: el umbral queda unos 0.25 m sobre la terraza (confianza baja)."
+      },
+      "estimado": true,
+      "confianza": "media"
+    },
+    "aberturas": [
+      {
+        "nombre": "puerta_ventana_dormitorio",
+        "fachada": "SO",
+        "tipo": "Puerta-ventana corrediza de 2 hojas, sin escalón visible",
+        "s_m": [1.8, 3.75],
+        "centro_mundo_aprox": [6.5, -8.2],
+        "ancho_m": 1.95,
+        "alto_m": 2.1,
+        "marco": { "material": "Aluminio negro", "color": "#17181A", "grosor_m": 0.07 },
+        "vidrio": "Gris oscuro, reflectante; se ven la cama y la cortina",
+        "detalle": "Cortina fina gris azulada (#98A9B3) corrida hacia el lado derecho de la puerta. Cama con cobertor amarillo mostaza (#D8B648).",
+        "estimado": true
+      },
+      {
+        "nombre": "ventanal_cocina_sala",
+        "fachada": "SO",
+        "tipo": "Ventanal corredizo de 4 paños: 1 fijo ancho a la izquierda (~1.8 m) y 3 hojas corredizas de ~0.85 m",
+        "s_m": [4.7, 9.0],
+        "centro_mundo_aprox": [8.4, -4.6],
+        "ancho_m": 4.3,
+        "alto_m": 2.2,
+        "marco": { "material": "Aluminio negro", "color": "#17181A", "grosor_m": 0.08 },
+        "vidrio": "Incoloro con tinte gris, bastante reflectante (se ven árboles y cielo). Opacidad sugerida 0.3 a 0.4.",
+        "estimado": true
+      },
+      {
+        "nombre": "puerta_vidriada_hastial",
+        "fachada": "SE",
+        "tipo": "Puerta corrediza de 2 hojas + paño fijo trapezoidal arriba",
+        "ancho_m": 2.2,
+        "alto_m": 3.4,
+        "alto_puerta_m": 2.4,
+        "marco": { "material": "Aluminio negro", "color": "#17181A", "grosor_m": 0.07 },
+        "vidrio": "Oscuro, reflectante",
+        "estimado": true
+      },
+      {
+        "nombre": "ventana_alta_bano",
+        "fachada": "NO",
+        "tipo": "Ventana alta tipo banderola, horizontal",
+        "ancho_m": 0.7,
+        "alto_m": 0.35,
+        "alfeizar_sobre_piso_m": 1.8,
+        "marco": {
+          "color": "#4A4A4A",
+          "nota": "Se ve oscuro con un marco claro (gris o blanco); no se distingue el material. Probablemente aluminio."
+        },
+        "vidrio": "Oscuro; no se ve si es repartido o esmerilado",
+        "posicion": "Cerca de la esquina N de la pared NO, 1 a 1.5 m de ella",
+        "estimado": true,
+        "confianza": "media-baja",
+        "nota": "El ancho está muy escorzado en foto 9; el real puede ser entre 0.5 y 0.8 m."
+      },
+      {
+        "nombre": "ventanal_o_puerta_trasera",
+        "fachada": "NE",
+        "tipo": "Puerta o ventanal corredizo con marco negro visto a través del ventanal SO",
+        "ancho_m": 2.0,
+        "alto_m": 2.0,
+        "marco": { "color": "#17181A" },
+        "vidrio": "Se ve ladrillo visto del vecino a través",
+        "estimado": true,
+        "confianza": "baja"
+      }
+    ],
+    "iluminacion": [
+      {
+        "id": "F1",
+        "tipo": "farol",
+        "color": "#1A1A1A",
+        "ubicacion": "Fachada SO, muro a la izquierda de la puerta-ventana del dormitorio, s=1.5, a ~2.0 m sobre el piso",
+        "centro_mundo_aprox": [5.7, -9.3]
+      },
+      {
+        "id": "F2",
+        "tipo": "farol",
+        "color": "#1A1A1A",
+        "ubicacion": "Fachada SO, muro entre la puerta-ventana y el ventanal, s=4.3, a ~2.0 m sobre el piso",
+        "centro_mundo_aprox": [7.0, -6.8]
+      },
+      {
+        "id": "F3",
+        "tipo": "farol",
+        "color": "#1A1A1A",
+        "ubicacion": "Fachada SO, tramito entre el ventanal y la pilastra, s=9.2, a ~2.0 m sobre el piso; al lado cuelga la cadena de lluvia",
+        "centro_mundo_aprox": [9.3, -2.5]
+      },
+      {
+        "id": "F4",
+        "tipo": "farol",
+        "color": "#1A1A1A",
+        "ubicacion": "Pared NO, a ~3 m de la esquina O y ~2.1 m sobre el piso (en fotos 6 y 7 se lo ve en pareja con otro por el escorzo)",
+        "centro_mundo_aprox": [7.5, -12.7],
+        "confianza": "media"
+      },
+      {
+        "id": "F5",
+        "tipo": "farol",
+        "color": "#1A1A1A",
+        "ubicacion": "Cara SE, sobre el panel de piedra, izquierda del par, ~2.3 m sobre el piso",
+        "centro_mundo_aprox": [14.0, -4.4]
+      },
+      {
+        "id": "F6",
+        "tipo": "farol",
+        "color": "#1A1A1A",
+        "ubicacion": "Cara SE, sobre el panel de piedra, derecha del par (~0.5 m del F5), ~2.3 m sobre el piso",
+        "centro_mundo_aprox": [14.4, -4.7]
+      },
+      {
+        "id": "forma_comun",
+        "tipo": "farol",
+        "descripcion": "Farol colonial de pared: cuerpo trapezoidal con vidrio, techito piramidal y remate, ménsula al muro.",
+        "dimensiones_m": { "ancho": 0.18, "fondo": 0.18, "alto": 0.38 },
+        "color": "#1A1A1A",
+        "vidrio": "Incoloro o muy tenue; no se ve ninguno encendido en ninguna foto",
+        "estimado": true
+      }
+    ],
+    "interior_visible": {
+      "cocina": {
+        "ubicacion": "Mitad NO del ambiente principal, detrás del paño fijo izquierdo del ventanal. Ambiente abierto, sin tabiques hacia la sala.",
+        "mesada": "Mesada de acero inoxidable con pileta y canilla, a la izquierda de la isla, contra la pared del fondo",
+        "pared_fondo": "Blanca, con un hueco oscuro rectangular (~0.7 x 0.6 m) a la altura de la isla, posible hogar o parrilla (no confirmado)",
+        "confianza": "media"
+      },
+      "isla": {
+        "descripcion": "Isla exenta revestida en piedra laja irregular igual a la del hastial, con tapa oscura",
+        "ancho_m": 1.1,
+        "fondo_m": 0.7,
+        "alto_m": 0.9,
+        "revestimiento_color": "#CDBBA0",
+        "tapa_color": "#48494C",
+        "tapa_material": "Granito o piedra gris oscuro con leve brillo",
+        "centro_mundo_aprox": [8.9, -6.5],
+        "estimado": true
+      },
+      "heladera": {
+        "descripcion": "Electrodoméstico alto, blanco, de esquinas superiores redondeadas, contra el vidrio fijo cerca del extremo NO del ventanal. Podría ser heladera o freezer vertical (no se distingue).",
+        "ancho_m": 0.6,
+        "fondo_m": 0.65,
+        "alto_m": 1.8,
+        "color": "#F2F2F0",
+        "centro_mundo_aprox": [8.3, -6.9],
+        "estimado": true,
+        "confianza": "media"
+      },
+      "dormitorio": {
+        "ubicacion": "Extremo O, detrás de la puerta-ventana",
+        "cama": "Cama con cobertor amarillo mostaza (#D8B648), vista a través del vidrio",
+        "cortina": "Fina, gris azulada (#98A9B3)",
+        "paredes": "Blancas (se ve poco)"
+      },
+      "sala": "No hay muebles claros visibles. Se ve una posible silla o banqueta blanca a través de las hojas corredizas (muy poco claro). El ambiente sigue hasta el hastial.",
+      "pisos": {
+        "interior": "Porcelanato o cerámico claro, liso y brillante, color #ECE8DF. Termina en el umbral de los vidrios.",
+        "terraza": "#E9DCC0 (ver galería)"
+      },
+      "cielorraso": "No visible desde ninguna foto."
+    }
+  },
+  "lote": {
+    "porton": {
+      "posicion": { "x": [0.5, 4.0], "z": 9.5, "nota": "Dato del escaneo; las fotos solo aportan proporciones." },
+      "orientacion": "Abre hacia la calle (+Z)",
+      "alto_m": 2.3,
+      "elementos_de_O_a_E_mirando_desde_la_calle": [
+        {
+          "elemento": "panel negro fijo (hoja ciega o cerco)",
+          "ancho_aprox_m": 1.5,
+          "alto_m": 2.3,
+          "color": "#1A1A1C",
+          "nota": "Algo más atrás que los pilares; detrás de la malla del alambrado."
+        },
+        {
+          "elemento": "pilar de hormigón visto",
+          "seccion_m": [0.45, 0.45],
+          "alto_m": 2.4,
+          "color": "#8C8C86",
+          "manchas": "#6E6E68",
+          "textura": "Hormigón con marcas de encofrado, manchado de humedad"
+        },
+        {
+          "elemento": "hoja negra de chapa acanalada vertical",
+          "ancho_m": 1.2,
+          "alto_m": 2.3,
+          "color": "#1A1A1C",
+          "nota": "En las fotos está abierta o a mitad de camino, pegada al pilar central."
+        },
+        { "elemento": "vano libre", "ancho_aprox_m": 1.5, "nota": "Por ahí se ve el auto en fotos 4, 5 y 8." },
+        {
+          "elemento": "panel de tablas de madera gris, verticales",
+          "ancho_m": 0.8,
+          "alto_m": 2.3,
+          "color": "#837D72",
+          "nota": "Tablas desgastadas, adosado al pilar de la derecha."
+        },
+        {
+          "elemento": "pilar de hormigón visto (E)",
+          "seccion_m": [0.45, 0.45],
+          "alto_m": 2.4,
+          "color": "#8C8C86",
+          "nota": "Con una pieza horizontal plana o losita en la cabeza que sale hacia el E (foto 5)."
+        }
+      ],
+      "estimado": true,
+      "confianza": "media (orden y materiales), baja (medidas)",
+      "nota_medidas": "Sumando los elementos da más que los 3.5 m del escaneo. Usar el ancho del escaneo y repartir en las proporciones: pilar 17 %, hoja 22 %, vano 31 %, madera 14 %, pilar 16 %."
+    },
+    "galpon": {
+      "posicion": { "x": 3.2, "z": 1.6, "nota": "Dato del escaneo" },
+      "dimensiones_m": { "ancho": 3.0, "fondo": 2.5, "alto": 2.9 },
+      "paredes": {
+        "material": "Tablas de madera verticales, desgastadas, sin pintar",
+        "color": "#837D72",
+        "ancho_tabla_m": 0.18
+      },
+      "techo": {
+        "material": "Chapa acanalada galvanizada o gris, una agua con muy poca pendiente (unos 5 grados)",
+        "color": "#6B7076",
+        "nota": "Sobresale unos 0.1 m del plano de las tablas"
+      },
+      "aberturas": "No se ve ninguna en las caras visibles (foto 10: cara frontal y una lateral angosta).",
+      "estimado": true,
+      "confianza": "media",
+      "nota": "El auto plateado de fotos 8 y 10 estaba apoyado contra su lado SO."
+    },
+    "alambrado": {
+      "tipo": "Tejido romboidal (alambre tejido) galvanizado",
+      "altura_m": 1.6,
+      "malla_m": 0.06,
+      "color": "#AEB3B6",
+      "postes": {
+        "material": "Hormigón o madera dura, finos, sin pintar",
+        "seccion_m": 0.1,
+        "separacion_m": 2.8,
+        "color": "#B2B1AA"
+      },
+      "recorrido": "Línea de calle (frente, z≈9.5, de la que forma parte el portón), y los costados O y E del lote. Visible delante de la casa en foto 3 y a lo largo del lado O en fotos 4 y 5.",
+      "transparencia": "Casi translúcido: se ve todo a través. Dibujarlo como plano con textura de rombos y alpha bajo.",
+      "estimado": true,
+      "confianza": "media"
+    },
+    "muros_vecinos": [
+      {
+        "id": "muro_E_hastial",
+        "ubicacion": "Este del hastial, hacia (18, 0) (dato del usuario)",
+        "material": "Muro de bloques revocado grueso, gris ocre, con parches caidos y manchas de humedad; un tramo de ladrillo visto a su derecha",
+        "color": "#9A958A",
+        "color_ladrillo": "#B4553B",
+        "alto_m": 2.3,
+        "largo_aprox_m": 4.5,
+        "detalle": "Parabólica blanca sobre mástil en el borde superior (fotos 2 y 3)",
+        "confianza": "media"
+      },
+      {
+        "id": "muro_E_lejano",
+        "ubicacion": "Más al E, detrás del alambrado (fotos 6 y 10)",
+        "material": "Muro de bloques revocado gris azulado con tapa oscura",
+        "color": "#727C88",
+        "alto_m": 1.9,
+        "confianza": "baja"
+      },
+      {
+        "id": "muro_NO_N",
+        "ubicacion": "Norte y noroeste, pegado al extremo NO de la casa (fotos 6, 7, 8, 9) y a lo largo del lado O hasta la calle (fotos 4 y 5)",
+        "material": "Ladrillo común visto, de obra a medio hacer, con pilares de hormigón y alambrado delante",
+        "color": "#B4553B",
+        "junta": "#C9BFB0",
+        "alto_m": 2.0,
+        "detalle": "Parte tiene revoque marrón ocre sucio (#8F6F55). Montones de ladrillo y de grava del otro lado (foto 8).",
+        "confianza": "media"
+      }
+    ],
+    "pilares_y_servicios_vecinos": {
+      "descripcion": "Al E del muro vecino, hacia la calle: columna de hormigón alta (~3 m), poste de caño delgado de 6 m con otro de caño con tubo naranja, y un pilar bajo de hormigón de medidor con caja chica arriba. Poste de luz con cables en el lado E (fotos 6 y 10).",
+      "colores": { "hormigon": "#A9A9A3", "poste": "#9AA0A5" },
+      "posicion": "Aproximada: x 19 a 21, entre z=0 y z=3 (baja confianza)",
+      "confianza": "baja"
+    },
+    "suelo": {
+      "cesped": {
+        "color": "#5C9A3A",
+        "color_claro": "#7DB84A",
+        "color_oscuro": "#3E7329",
+        "descripcion": "Pasto verde intenso, corto cerca de la casa y alto (30 a 60 cm) con yuyos hacia el frente y los costados. Algunos parches de tierra colorada asoman entre el pasto (fotos 2 y 3)."
+      },
+      "tierra_colorada": {
+        "color": "#9E4A2E",
+        "color_seca": "#B5623F",
+        "color_humeda": "#7E3B26",
+        "descripcion": "Entrada de autos compactada y lisa entre el portón y el hastial (foto 4: ~4 m x 2.5 m delante de los pilares), con manchas rojas sueltas por el lote. También aparece bajo el arbolado como suelo pelado."
+      },
+      "arena": {
+        "color": "#D8C7A3",
+        "descripcion": "Montículo de arena clara de ~3 m de diámetro y ~0.4 m de alto, cerca del frente, entre el portón y el hastial hacia la calle",
+        "posicion_aprox": "x 4 a 8, z 8 a 11",
+        "confianza": "baja"
+      },
+      "terraza_borde": "Ver casa.galería",
+      "nota": "El terreno se ve casi plano. No hay veredas ni caminos construidos aparte de la terraza."
+    },
+    "vegetacion": [
+      {
+        "tipo": "palmera",
+        "especie": "Pindó (Syagrus romanzoffiana), por su aspecto",
+        "cantidad": 1,
+        "alto_m": 9,
+        "copa_diametro_m": 4.5,
+        "tronco": { "diametro_m": 0.3, "color": "#9A9488", "forma": "Recto, gris claro, liso con anillos" },
+        "hojas": { "color": "#3F7A3A", "forma": "Pencas largas y caidas en arco" },
+        "posicion": "Al O/NO de la casa, detrás del arbolado (se ve detrás del techo en fotos 1, 2, 3, 4, 6 y 7)",
+        "posicion_aprox_mundo": [0.5, -12.3],
+        "estimado": true,
+        "confianza": "baja (posición), media (forma)"
+      },
+      {
+        "tipo": "arboleda",
+        "descripcion": "Franja de árboles finos y medianos en el lado O y NO de la casa, que se prolonga hacia el N",
+        "cantidad_aprox": 20,
+        "alto_m": [6, 9],
+        "tronco": {
+          "diametro_m": [0.1, 0.25],
+          "color": "#7C746A",
+          "textura": "Corteza gris con manchas claras de liquen (#A39F94)",
+          "altura_hasta_primeras_ramas_m": 2.5
+        },
+        "follaje": {
+          "color": "#2F6B2A",
+          "color_claro": "#3F8A35",
+          "forma": "Hojas lanceoladas brillantes, copa irregular",
+          "copa_diametro_m": [3, 5]
+        },
+        "area_aprox": "x -4 a 3, z -16 a -6 (zona de 'Arboleda' del visor)",
+        "sotobosque": "Suelo con tierra colorada y hojarasca, algo de pasto y plantas rastreras",
+        "estimado": true,
+        "confianza": "media"
+      },
+      {
+        "tipo": "árbol",
+        "descripcion": "Árbol de copa redonda y densa, baja, justo detrás del extremo NO de la casa; algunas ramas llegan sobre el techo (fotos 1, 2, 3)",
+        "alto_m": 6,
+        "copa_diametro_m": 6,
+        "follaje": { "color": "#2A5E24" },
+        "estimado": true,
+        "confianza": "baja"
+      },
+      {
+        "tipo": "árbol",
+        "descripcion": "Árbol grande de hojas finamente divididas (aspecto de leguminosa), a la izquierda del portón, con la copa sobre la calle (fotos 4 y 5)",
+        "alto_m": 11,
+        "copa_diametro_m": 9,
+        "tronco": { "color": "#6E665B", "diametro_m": 0.3 },
+        "follaje": { "color": "#3C7A33" },
+        "estimado": true,
+        "confianza": "media"
+      },
+      {
+        "tipo": "arbol_seco",
+        "descripcion": "Árbol sin hojas, solo ramas finas, atrás de la casa hacia el E/NE (fotos 3, 6 y 10)",
+        "alto_m": 8,
+        "color": "#6E665B",
+        "posicion_aprox_mundo": [19, -10],
+        "nota": "Triangulado a ojo con fotos 3 y 6",
+        "confianza": "baja"
+      },
+      {
+        "tipo": "arboles_vecinos_E",
+        "descripcion": "Árbol frondoso grande detrás del muro vecino del E (foto 3, derecha) y vegetación alta más atrás",
+        "alto_m": 9,
+        "copa_diametro_m": 8,
+        "follaje": { "color": "#3C7A33" },
+        "confianza": "baja"
+      },
+      {
+        "tipo": "cañas",
+        "descripcion": "Tallos finos y rectos, amarillentos, con hojas solo arriba (tipo tacuara o bambú), junto a la esquina O (foto 1, izquierda)",
+        "alto_m": 5,
+        "color": "#8C8A4E",
+        "confianza": "baja"
+      },
+      {
+        "tipo": "pasto_y_yuyos",
+        "descripcion": "Matas de gramíneas altas y plantas de hoja ancha en el frente, a los costados del portón y al pie del alambrado",
+        "alto_m": [0.3, 0.6],
+        "color": "#4F8A2F",
+        "confianza": "media"
+      }
+    ],
+    "otros_objetos": [
+      {
+        "nombre": "macetero negro",
+        "ubicacion": "Cerca de la esquina O, al pie de la pared (fotos 6 y 7)",
+        "tamano_m": [0.3, 0.3, 0.25],
+        "color": "#1A1A1A"
+      }
+    ],
+    "objetos_temporales_no_modelar": [
+      "Auto plateado (sedan) en fotos 4, 5, 8 y 10; no estaba en el escaneo",
+      "Mesa de madera rústica y 2 o 3 bancos hechos con tablas sobre ladrillos en la arboleda (fotos 7 y 8)",
+      "Palo horizontal con una bolsa azul y sogas colgadas (fotos 7 y 8)",
+      "Tendedero o estructura de metal negra colgando de un árbol (fotos 8 y 9)",
+      "Tachos de pintura blancos al pie de la pared NO (fotos 8 y 9)",
+      "Malla de alambre aplastada apoyada contra la pared NO y tierra con hierros (foto 9)",
+      "Pilas de ladrillo, grava y escombro del lado vecino (fotos 7 y 8)"
+    ],
+    "cielo_iluminacion": {
+      "hora_aprox": "Entre las 10:30 y las 14:30 (sol alto, sombras cortas); las fotos no permiten afinar más.",
+      "estacion": "Primavera o verano por la vegetación frondosa y el pasto alto (inferido).",
+      "condicion": "Día soleado con cielo azul intenso y cúmulos dispersos. Fotos 6 y 8-9 con más nubes o con sombra de arboleda.",
+      "direccion_sol": {
+        "descripcion": "El frente SE de piedra y la fachada SO están bien iluminados; la pared NO está en sombra (aunque también la tapa el arbolado). Eso indica sol alto desde el sector S-SO del plano (hacia la calle, un poco hacia el O).",
+        "vector_hacia_el_sol": [-0.15, 0.85, 0.5],
+        "elevacion_grados": 58,
+        "nota": "Orientación en coordenadas del plano, no norte geográfico. Confianza media-baja.",
+        "sombras": "Debajo del alero hay una banda de sombra corta y suave sobre el muro; la pilastra del hastial proyecta poca sombra."
+      },
+      "cielo": {
+        "cenit": "#1D58C4",
+        "horizonte": "#8DB9EA",
+        "nubes": "#FFFFFF",
+        "base_nubes": "#B5BDC9",
+        "tipo_nubes": "Cúmulos blancos, con base gris en la foto 6"
+      },
+      "luz_ambiente": "Luz de día limpia y neutra; rebote verde bajo el arbolado (#3F6B35 en sombras)."
+    }
+  },
+  "fotos": [
+    {
+      "n": 1,
+      "toma": "Vertical. Desde el césped, muy cerca del extremo S, mirando al NE sobre la fachada SO.",
+      "descripcion": "Fachada SO en perspectiva fuerte: pasto y yuyos en primer plano, terraza crema con manchas anaranjadas, escalones frente al ventanal (cocina visible con heladera e isla de piedra), puerta-ventana del dormitorio a la izquierda con cortina, pilastra blanca rugosa del hastial a la derecha con farol y cadena de lluvia; asoma el vidrio del hastial y sus escalones. Arriba, el techo oscuro con cenefa negra, cabezas de viga y chimenea. Palmera pindó y arboleda a la izquierda.",
+      "elementos_visibles": [
+        "pindó y árboles a la izquierda",
+        "techo de chapa gris oscuro",
+        "cenefa negra",
+        "5 cabezas de viga",
+        "chimenea blanca con tapa negra",
+        "pretil blanco detrás del techo",
+        "faroles F1, F2 y F3",
+        "cadenas de lluvia en F1 y F3",
+        "puerta-ventana del dormitorio con cortina",
+        "ventanal de 4 paños con marcos negros",
+        "heladera blanca",
+        "isla con piedra",
+        "mesada de acero con pileta",
+        "escalones de dos peldaños (SO)",
+        "pilastra rugosa del hastial",
+        "vidrio y escalones de la cara SE",
+        "terraza con manchas de tierra",
+        "césped y yuyos",
+        "cielo azul con cúmulos"
+      ]
+    },
+    {
+      "n": 2,
+      "toma": "Vertical. Desde el frente/sur del lote, sobre césped con parches de tierra colorada, mirando al N-NE hacia el hastial.",
+      "descripcion": "Casa de frente y de costado: fachada SO a la izquierda y hastial a la derecha, con el marco blanco, la franja negra acanalada y el panel de piedra con dos faroles. Escalones y terraza en primer plano; muro vecino con parabólica a la derecha. Palmera pindó detrás del techo, arboleda a ambos lados.",
+      "elementos_visibles": [
+        "marco blanco del hastial en forma de casita",
+        "tapa negra sobre los faldones",
+        "vidrio retranqueado con paño fijo trapezoidal",
+        "franja negra acanalada",
+        "panel de piedra con 2 faroles",
+        "escalones del hastial",
+        "terraza crema",
+        "chimenea por encima del techo",
+        "pindó detrás",
+        "muro vecino gris ocre con parabólica",
+        "árboles de ambos lados",
+        "césped con parches de tierra colorada"
+      ]
+    },
+    {
+      "n": 3,
+      "toma": "Apaisada. Desde la calle, al SE, mirando al NO; hay alambrado romboidal delante de la cámara.",
+      "descripcion": "Frente SE del hastial casi de frente: marco blanco, vidrio, franja negra, piedra con faroles. A la izquierda se ve de escorzo la fachada SO. Muro vecino a la derecha con parabólica y ladrillo, postes y pilares de medidor al fondo derecho. Arena clara y tierra colorada en primer plano.",
+      "elementos_visibles": [
+        "alambrado con postes finos",
+        "hastial completo con la pendiente de sus faldones",
+        "paño fijo trapezoidal y puerta corrediza",
+        "faroles sobre la piedra",
+        "escalones del hastial",
+        "terraza en el borde izquierdo",
+        "muro vecino con parabólica",
+        "pilar de medidor y postes de luz",
+        "árbol seco a la derecha",
+        "pindó detrás de la casa",
+        "montón de arena",
+        "tierra colorada y yuyos"
+      ]
+    },
+    {
+      "n": 4,
+      "toma": "Apaisada. Desde la calle, delante del portón, mirando al NO.",
+      "descripcion": "Portón visto desde afuera: panel negro, pilar de hormigón, hoja negra de chapa, vano libre con el auto detrás, panel de tablas grises y segundo pilar. Entrada de tierra colorada compactada. A la derecha, el extremo de la fachada SO de la casa y el pindó. Árbol grande a la izquierda y arboleda; muro de ladrillo vecino a la izquierda.",
+      "elementos_visibles": [
+        "panel negro",
+        "pilar de hormigón central",
+        "hoja de chapa acanalada negra",
+        "panel de tablas grises",
+        "pilar de hormigón E con losita",
+        "entrada de tierra colorada",
+        "auto plateado dentro del lote",
+        "ladrillo visto a la izquierda",
+        "alambrado y postes",
+        "casa y pindó a la derecha",
+        "árbol grande de hojas finas a la izquierda",
+        "arena en el borde inferior derecho"
+      ]
+    },
+    {
+      "n": 5,
+      "toma": "Apaisada. Desde la calle, un poco más a la izquierda y más atrás que la foto 4.",
+      "descripcion": "Mismo portón con otra perspectiva: se ve mejor la hoja negra con el pilar, el panel de madera y la losa plana sobre el pilar derecho. A la izquierda, muro de ladrillo con pilares; detrás, una obra vecina con techo azul. Árbol grande a la izquierda.",
+      "elementos_visibles": [
+        "pilares de hormigón manchados",
+        "hoja negra acanalada",
+        "panel de madera gris",
+        "losita horizontal sobre el pilar derecho",
+        "tierra colorada compactada",
+        "auto plateado",
+        "muro de ladrillo con pilares a la izquierda",
+        "casa vecina con techo azul al fondo",
+        "alambrado",
+        "árbol grande",
+        "arena a la derecha"
+      ]
+    },
+    {
+      "n": 6,
+      "toma": "Apaisada. Desde el césped, al O de la casa, a unos 15 m, casi de frente a la fachada SO.",
+      "descripcion": "La mejor vista de la fachada SO completa: muro con farol, puerta-ventana del dormitorio (cama amarilla y cortina), muro, ventanal de 4 paños con la isla de piedra, y la pilastra del hastial en el extremo derecho. Techo de una agua con cenefa, cabezas de viga, chimenea y bloques blancos detrás. Se ve el lado NO del hastial por encima del techo. Muro de ladrillo del vecino en el extremo NO y muro gris azulado al E; poste de luz; árbol seco.",
+      "elementos_visibles": [
+        "fachada SO completa",
+        "techo, cenefa y cabezas de viga",
+        "chimenea",
+        "pretil blanco",
+        "dos faroles juntos en la esquina O",
+        "puerta-ventana del dormitorio",
+        "ventanal de 4 paños",
+        "isla con piedra",
+        "pared de fondo con segundo marco negro",
+        "escalones del ventanal",
+        "pilastra del hastial y su farol",
+        "muro de ladrillo vecino a la izquierda",
+        "muro gris azulado y poste de luz a la derecha",
+        "árbol seco detrás",
+        "pindó y arboleda a la izquierda",
+        "nubes grandes"
+      ]
+    },
+    {
+      "n": 7,
+      "toma": "Apaisada, en 4:3 más chica. Dentro de la arboleda, al O de la casa, mirando al NE.",
+      "descripcion": "Arboleda de troncos finos con mesa y bancos de madera, un palo con bolsa azul y ladrillos sueltos. A la derecha, la esquina O de la casa: pared blanca con dos faroles, una pilastra y una franja de terraza al pie; muro de ladrillo vecino detrás y una maceta negra.",
+      "elementos_visibles": [
+        "troncos finos grises",
+        "mesa y bancos de madera",
+        "bolsa azul colgada",
+        "ladrillos sueltos",
+        "pindó arriba a la derecha",
+        "muro de ladrillo del vecino",
+        "pared NO/esquina O de la casa",
+        "faroles",
+        "terraza al pie",
+        "maceta negra",
+        "césped iluminado en primer plano"
+      ]
+    },
+    {
+      "n": 8,
+      "toma": "Apaisada. Desde la arboleda al NO/O, mirando al S hacia el portón.",
+      "descripcion": "A través del arbolado: a la izquierda la pared NO en sombra y el extremo O de la fachada SO con su puerta vidriada, farol y terraza; al fondo el galpón, el portón con su hoja negra, el auto plateado y los muros de ladrillo vecinos a ambos lados. En primer plano, un tablón y bancos, un tendedero de metal, tachos y ladrillos.",
+      "elementos_visibles": [
+        "pared NO y puerta-ventana del dormitorio con farol",
+        "terraza con peldaño",
+        "galpón de tablas",
+        "portón negro y pilares",
+        "auto plateado",
+        "muro de ladrillo a la derecha",
+        "alambrado",
+        "arboleda",
+        "tablones y bancos",
+        "tendedero",
+        "tachos de pintura"
+      ]
+    },
+    {
+      "n": 9,
+      "toma": "Apaisada. Entre los árboles al O/NO, mirando hacia la pared NO de la casa.",
+      "descripcion": "Pared NO blanca en sombra, casi ciega: farol a mitad de pared y ventana alta chica cerca de la esquina N, junta vertical cerca de la esquina O. A la derecha, la esquina O con la puerta-ventana del dormitorio de la fachada SO vista de canto (con su farol, el alero y un peldaño). Muro de ladrillo y alambre a la izquierda; tachos de pintura y malla de alambre al pie.",
+      "elementos_visibles": [
+        "pared NO blanca",
+        "ventana alta chica",
+        "farol F4",
+        "junta vertical",
+        "esquina O",
+        "puerta-ventana del dormitorio vista de canto",
+        "farol F1",
+        "alero con cabezas de viga",
+        "terraza y peldaño",
+        "muro de ladrillo vecino",
+        "alambrado",
+        "tachos de pintura",
+        "malla de alambre",
+        "troncos de la arboleda",
+        "tablón en primer plano"
+      ]
+    },
+    {
+      "n": 10,
+      "toma": "Apaisada (2000 x 1500). Desde el frente del lote, junto al galpón, mirando al NE hacia la fachada SO.",
+      "descripcion": "Auto plateado en primer plano y el galpón de tablas grises con techo de chapa a la derecha. Detrás, la fachada SO: techo con chimenea y pretil blanco, cenefa negra y cabezas de viga, faroles F1 y F2, puerta-ventana del dormitorio con la cama amarilla y la cortina, y el ventanal con la isla de piedra; se ve el fondo ladrillo visto a través del segundo marco negro. A la derecha el muro gris azulado vecino, el alambrado y tierra colorada.",
+      "elementos_visibles": [
+        "auto plateado",
+        "galpón de tablas grises y chapa",
+        "chimenea y pretil blanco",
+        "techo gris oscuro con nervios",
+        "cabezas de viga",
+        "faroles F1 y F2",
+        "puerta-ventana del dormitorio (cama y cortina)",
+        "ventanal con isla de piedra",
+        "marco trasero con ladrillo detrás",
+        "muro gris azulado",
+        "alambrado",
+        "poste de luz",
+        "tierra colorada",
+        "árboles y árbol seco detrás"
+      ]
+    }
+  ],
+  "faltantes_en_escaneo": [
+    "Toda la parte alta: la chapa del techo, la chimenea, el pretil blanco, la cumbrera y la tapa negra del hastial. Desde el césped solo se ve el borde bajo, y las superficies oscuras y lisas a contraluz salen mal o desaparecen.",
+    "Los vidrios y los marcos negros finos del ventanal, de la puerta-ventana del dormitorio y de la puerta del hastial: los vidrios son reflectantes y transparentes (se ven como agujeros o niebla), y los marcos de 7-8 cm son demasiado delgados para el escaneo.",
+    "El interior (isla, heladera, mesada, cama, piso interior, segundo marco negro del fondo): solo se ve a través del vidrio y el escaneo suele mezclarlo con el reflejo del cielo.",
+    "Los faroles (6), las cadenas de lluvia y las cabezas de viga: objetos chicos y oscuros, 10 a 40 cm.",
+    "La franja negra acanalada del hastial y las hojas negras del portón: tan oscuras que casi no dan textura.",
+    "El alambrado romboidal y sus postes finos: alambre de 2 mm.",
+    "La cara NE (trasera) de la casa, la esquina N, la parte alta de la pared NO con su ventana chica y el lado interior de los muros vecinos: no se ven desde el césped.",
+    "El techo y el frente del galpón, las tablas individuales y la losita sobre el pilar E del portón.",
+    "Ramas finas, copa de la palmera, árbol seco, cielo y nubes: el escaneo desde el suelo no las capta o las deja desparramadas.",
+    "El color real de la terraza: tiende a lavarse por el sol directo; las manchas anaranjadas de tierra colorada pueden perderse.",
+    "Muros del vecino al E y al N, pilares de medidor, postes y cables: quedan lejos del recorrido.",
+    "Objetos temporales que SÍ pueden aparecer en el escaneo y conviene ignorar: mesa, bancos, tendedero, tachos y malla en la arboleda; el auto estaba afuera al escanear."
+  ]
+}

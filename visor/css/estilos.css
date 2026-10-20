@@ -1,0 +1,252 @@
+:root {
+  --fondo: #0f1512;
+  --texto: #eef1ea;
+  --panel: rgba(10, 16, 12, 0.78);
+  --borde: rgba(255, 255, 255, 0.14);
+  --acento: #9bd98a;
+  --acento-texto: #0f1512;
+  --radio: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--fondo);
+  color: var(--texto);
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ---------- escena 3D ---------- */
+#escena {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, #8fb8e8 0%, #d6e6f5 48%, #6f8a5e 52%, #3f5a35 100%);
+  cursor: grab;
+}
+#escena:active { cursor: grabbing; }
+#escena canvas { display: block; width: 100%; height: 100%; }
+
+/* ---------- carga ---------- */
+#carga {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: var(--fondo);
+  text-align: center;
+  padding: 24px;
+}
+#carga[hidden] { display: none; }
+#carga h1 { font-size: 20px; font-weight: 600; margin: 0 0 14px; }
+#carga .barra {
+  width: min(360px, 80vw);
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0 auto 10px;
+}
+#carga .barra > div {
+  height: 100%;
+  width: 0%;
+  background: var(--acento);
+  transition: width 0.2s ease-out;
+}
+#carga p { margin: 0; opacity: 0.8; }
+#carga .error { color: #ffb4a8; max-width: 420px; }
+
+/* ---------- paneles ---------- */
+.panel {
+  position: fixed;
+  z-index: 10;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+#cabecera {
+  top: max(12px, env(safe-area-inset-top, 0px));
+  left: max(12px, env(safe-area-inset-left, 0px));
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#cabecera h1 { font-size: 15px; font-weight: 600; margin: 0; }
+#cabecera button, #cabecera .boton { margin-left: 4px; }
+#cabecera .boton { text-decoration: none; }
+
+#lugares {
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  width: 220px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#lugares h2 {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin: 4px 0 0;
+}
+.fichas { display: flex; flex-wrap: wrap; gap: 6px; }
+
+button, .boton {
+  font: inherit;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  line-height: 1.2;
+}
+button:hover { background: rgba(255, 255, 255, 0.16); }
+button.activo { background: var(--acento); color: var(--acento-texto); border-color: transparent; }
+button.ficha-foto { padding: 4px 8px; font-size: 13px; }
+
+/* ---------- mini plano ---------- */
+#minimapa {
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  left: max(12px, env(safe-area-inset-left, 0px));
+  width: 190px;
+  height: 246px;
+  padding: 0;
+  overflow: hidden;
+  cursor: crosshair;
+}
+#minimapa canvas { display: block; width: 100%; height: 100%; }
+
+/* ---------- ayuda ---------- */
+#ayuda {
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  left: calc(214px + env(safe-area-inset-left, 0px));
+  padding: 8px 12px;
+  font-size: 12.5px;
+  max-width: 420px;
+  opacity: 0.92;
+}
+#ayuda kbd {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  padding: 0 5px;
+  font: 11px ui-monospace, Menlo, monospace;
+}
+#ayuda.oculto { display: none; }
+
+/* ---------- comparador ---------- */
+#comparador {
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 24px));
+  padding: 10px 14px 12px;
+  z-index: 20;
+}
+#comparador[hidden] { display: none; }
+#comparador .fila { display: flex; align-items: center; gap: 10px; }
+#comparador .titulo { flex: 1; font-weight: 600; font-size: 13px; min-width: 0; }
+#comparador .fuentes { display: flex; gap: 4px; }
+#comparador .fuentes button { padding: 4px 8px; font-size: 12px; }
+#comparador .fuentes button[hidden] { display: none; }
+#comparador input[type="range"] { flex: 1; accent-color: var(--acento); }
+#comparador .etiqueta { font-size: 12px; opacity: 0.75; width: 44px; text-align: center; }
+#foto-superpuesta {
+  position: fixed;
+  z-index: 5;
+  pointer-events: none;
+  object-fit: fill;
+  display: none;
+}
+#foto-superpuesta.visible { display: block; }
+#marco-foto {
+  position: fixed;
+  z-index: 4;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 200vmax rgba(15, 21, 18, 0.85);
+  display: none;
+}
+#marco-foto.visible { display: block; }
+
+/* ---------- joystick táctil ---------- */
+#joystick {
+  position: fixed;
+  z-index: 15;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  display: none;
+  transform: translate(-50%, -50%);
+}
+#joystick::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  transform: translate(calc(-50% + var(--jx, 0px)), calc(-50% + var(--jy, 0px)));
+}
+#joystick.visible { display: block; }
+
+#hud {
+  position: fixed;
+  top: 60px;
+  left: 12px;
+  z-index: 10;
+  font: 11px ui-monospace, Menlo, monospace;
+  opacity: 0.7;
+  display: none;
+}
+#hud.visible { display: block; }
+
+@media (pointer: coarse) {
+  #boton-mouse { display: none; }
+}
+
+/* ---------- celular ---------- */
+@media (max-width: 760px), (max-height: 520px) {
+  #cabecera { padding: 6px 10px; gap: 6px; }
+  #cabecera h1 { font-size: 13px; white-space: nowrap; }
+  #boton-mouse { display: none; }   /* capturar el mouse no tiene sentido en táctil */
+  #cabecera button { padding: 5px 8px; font-size: 13px; }
+  #lugares {
+    top: auto;
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: 38vh;
+    padding: 8px 10px 10px;
+  }
+  #minimapa {
+    top: 56px;
+    bottom: auto;
+    right: 12px;
+    left: auto;
+    width: 120px;
+    height: 155px;
+  }
+  #ayuda { bottom: auto; top: 56px; left: 12px; right: 12px; max-width: none; }
+  #comparador { bottom: auto; top: 56px; left: 12px; right: 12px; transform: none; width: auto; }
+}

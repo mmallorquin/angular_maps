@@ -1,0 +1,159 @@
+[
+  {
+    "id": "foto-1",
+    "archivo": "ia/foto-1.jpg",
+    "base": "renders/foto-1.jpg",
+    "referencia": "fotos/foto-1.jpg",
+    "prompt": "Photorealistic completion of a 3D scan render. The FIRST reference image is the render: keep its exact camera viewpoint, composition, perspective and geometry. The SECOND reference image is a real photo of the same house: use it only as the reference for materials, colours and light. The house: white rendered walls, grey corrugated metal single-slope roof with a wide eave and exposed dark timber beams, black aluminium sliding glass doors and windows, a taller stone-clad gable volume at one end, beige tiled gallery with three steps, black lantern wall lights, a chimney. Surroundings: lawn with tall grass, red laterite soil, wire fence with concrete posts, a weathered wooden shed, trees and a palm tree, sunny day with blue sky and cumulus clouds. Fill in blurry or missing areas with plausible, consistent detail. No people, no text, no watermark. This view shows: a portrait close view of the gallery: the large black sliding glass doors with the stone-clad counter visible inside, the beige tiled gallery with three steps, a black lantern wall light, the chimney on the roof, the taller white gable volume at the right edge, a palm tree and trees on the left and lawn in the foreground.",
+    "estado": "ok",
+    "nota": "Generada con generate-image (PORTRAIT_3_4); media id MAHYal8T4cI; exportada a JPG 1088x1456 (calidad 100, pro) desde la pagina 5 del diseno Canva DAHYapI_RKw. Verificada con sips y revisada visualmente."
+  },
+  {
+    "id": "foto-2",
+    "archivo": "ia/foto-2.jpg",
+    "base": "renders/foto-2.jpg",
+    "referencia": "fotos/foto-2.jpg",
+    "prompt": "Photorealistic completion of a 3D scan render. The FIRST reference image is the render: keep its exact camera viewpoint, composition, perspective and geometry. The SECOND reference image is a real photo of the same house: use it only as the reference for materials, colours and light. The house: white rendered walls, grey corrugated metal single-slope roof with a wide eave and exposed dark timber beams, black aluminium sliding glass doors and windows, a taller stone-clad gable volume at one end, beige tiled gallery with three steps, black lantern wall lights, a chimney. Surroundings: lawn with tall grass, red laterite soil, wire fence with concrete posts, a weathered wooden shed, trees and a palm tree, sunny day with blue sky and cumulus clouds. Fill in blurry or missing areas with plausible, consistent detail. No people, no text, no watermark. This view shows: a portrait view from the lawn looking at the long low facade: the black sliding glass doors and beige tiled gallery with steps in the centre, the stone-clad counter visible through the glass, the taller white gable volume with stone cladding and large black glass at the right end, a palm tree and trees on the left, a brick wall at the far right, big blue sky with clouds, lawn with red soil patches in the foreground.",
+    "estado": "ok",
+    "nota": "Generada con generate-image (PORTRAIT_3_4); media id MAHYavPgv0A; exportada a JPG 1088x1456 (calidad 100, pro) desde la pagina 4 del diseno Canva DAHYapI_RKw. Verificada con sips y revisada visualmente."
+  },
+  {
+    "id": "foto-3",
+    "archivo": "ia/foto-3.jpg",
+    "base": "renders/foto-3.jpg",
+    "referencia": "fotos/foto-3.jpg",
+    "prompt": "Photorealistic completion of a 3D scan render. The FIRST reference image is the render: keep its exact camera viewpoint, composition, perspective and geometry. The SECOND reference image is a real photo of the same house: use it only as the reference for materials, colours and light. The house: white rendered walls, grey corrugated metal single-slope roof with a wide eave and exposed dark timber beams, black aluminium sliding glass doors and windows, a taller stone-clad gable volume at one end, beige tiled gallery with three steps, black lantern wall lights, a chimney. Surroundings: lawn with tall grass, red laterite soil, wire fence with concrete posts, a weathered wooden shed, trees and a palm tree, sunny day with blue sky and cumulus clouds. Fill in blurry or missing areas with plausible, consistent detail. No people, no text, no watermark. This view shows: the house seen from outside the wire fence at eye level: on the left the low single-slope white facade with black sliding glass doors under the grey metal roof, and at the right end the taller white gable volume with a stone-clad side wall and a black slatted panel, a palm tree and trees behind, a chain-link wire fence with concrete posts across the middle ground, red laterite soil patches and tall grass in the foreground.",
+    "estado": "ok",
+    "nota": "Generada con generate-image (LANDSCAPE_4_3); media id MAHYah-oG5Q; exportada a JPG 1456x1088 (calidad 100, pro) desde la pagina 3 del diseno Canva DAHYapI_RKw. Verificada con sips y revisada visualmente."
+  },
+  {
+    "id": "foto-4",
+    "archivo": null,
+    "base": "renders/foto-4.jpg",
+    "referencia": "fotos/foto-4.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No generada: cuota de creditos de Canva agotada (quota_exceeded, intento del 2026-10-19 07:00 -03) antes de llegar a esta vista. Pendiente de reintentar; sus archivos aun no estan subidos a Canva."
+  },
+  {
+    "id": "foto-5",
+    "archivo": null,
+    "base": "renders/foto-5.jpg",
+    "referencia": "fotos/foto-5.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No generada: cuota de creditos de Canva agotada (quota_exceeded, intento del 2026-10-19 07:00 -03) antes de llegar a esta vista. Pendiente de reintentar; sus archivos aun no estan subidos a Canva."
+  },
+  {
+    "id": "foto-6",
+    "archivo": "ia/foto-6.jpg",
+    "base": "renders/foto-6.jpg",
+    "referencia": "fotos/foto-6.jpg",
+    "prompt": "Photorealistic completion of a 3D scan render. The FIRST reference image is the render: keep its exact camera viewpoint, composition, perspective and geometry. The SECOND reference image is a real photo of the same house: use it only as the reference for materials, colours and light. The house: white rendered walls, grey corrugated metal single-slope roof with a wide eave and exposed dark timber beams, black aluminium sliding glass doors and windows, a taller stone-clad gable volume at one end, beige tiled gallery with three steps, black lantern wall lights, a chimney. Surroundings: lawn with tall grass, red laterite soil, wire fence with concrete posts, a weathered wooden shed, trees and a palm tree, sunny day with blue sky and cumulus clouds. Fill in blurry or missing areas with plausible, consistent detail. No people, no text, no watermark. This view shows: the front of the house seen from the lawn at eye level, the single-storey white facade with the black sliding window on the left, the large black sliding glass doors with the beige tiled gallery and steps on the right, the chimney rising above the roof, dense trees on the left and a green lawn in the foreground.",
+    "estado": "ok",
+    "nota": "Generada con generate-image (LANDSCAPE_4_3); media id MAHYapdbTNc; exportada a JPG 1456x1088 (calidad 100, pro) desde la pagina 2 del diseno Canva DAHYapI_RKw. Verificada con sips y revisada visualmente."
+  },
+  {
+    "id": "foto-7",
+    "archivo": null,
+    "base": "renders/foto-7.jpg",
+    "referencia": "fotos/foto-7.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No generada: cuota de creditos de Canva agotada (quota_exceeded, intento del 2026-10-19 07:00 -03) antes de llegar a esta vista. Pendiente de reintentar; sus archivos aun no estan subidos a Canva."
+  },
+  {
+    "id": "foto-8",
+    "archivo": null,
+    "base": "renders/foto-8.jpg",
+    "referencia": "fotos/foto-8.jpg",
+    "prompt": "Photorealistic completion of a 3D scan render. The FIRST reference image is the render: keep its exact camera viewpoint, composition, perspective and geometry. The SECOND reference image is a real photo of the same house: use it only as the reference for materials, colours and light. The house: white rendered walls, grey corrugated metal single-slope roof with a wide eave and exposed dark timber beams, black aluminium sliding glass doors and windows, a taller stone-clad gable volume at one end, beige tiled gallery with three steps, black lantern wall lights, a chimney. Surroundings: lawn with tall grass, red laterite soil, wire fence with concrete posts, a weathered wooden shed, trees and a palm tree, sunny day with blue sky and cumulus clouds. Fill in blurry or missing areas with plausible, consistent detail. No people, no text, no watermark. This view shows: a grassy yard seen between tree trunks: the white wall of the house at the far left edge, a weathered grey wooden shed and a silver car in the distance, a red-brick wall and wire fence at the right, a rustic wooden bench in the foreground, lawn and trees.",
+    "estado": "error",
+    "nota": "Intento 2026-10-19 07:00 (-03): Canva respondio status 'failed', code 'quota_exceeded' (\"You have exceeded your credit quota.\") al generar foto-8, justo despues de lograr foto-10 y foto-9. No se reintento. Entradas ya subidas para retomar: render MAHYcN0yxC8, foto MAHYcLORURk."
+  },
+  {
+    "id": "foto-9",
+    "archivo": "ia/foto-9.jpg",
+    "base": "renders/foto-9.jpg",
+    "referencia": "fotos/foto-9.jpg",
+    "prompt": "Photorealistic completion of a 3D scan render. The FIRST reference image is the render: keep its exact camera viewpoint, composition, perspective and geometry. The SECOND reference image is a real photo of the same house: use it only as the reference for materials, colours and light. The house: white rendered walls, grey corrugated metal single-slope roof with a wide eave and exposed dark timber beams, black aluminium sliding glass doors and windows, a taller stone-clad gable volume at one end, beige tiled gallery with three steps, black lantern wall lights, a chimney. Surroundings: lawn with tall grass, red laterite soil, wire fence with concrete posts, a weathered wooden shed, trees and a palm tree, sunny day with blue sky and cumulus clouds. Fill in blurry or missing areas with plausible, consistent detail. No people, no text, no watermark. This view shows: the side of the house seen through several slender tree trunks in the foreground: a white rendered wall with a black lantern and the corner of the building with the tiled gallery floor at the right, a red-brick wall and wire fence at the left, dense foliage and dappled sunlight.",
+    "estado": "ok",
+    "nota": "Generada con generate-image (LANDSCAPE_4_3); media id MAHYcE4xEes; exportada a JPG 1456x1088 (calidad 100, pro) desde la pagina 7 del diseno Canva DAHYapI_RKw. Verificada con sips y revisada visualmente. Salvedad: sigue la composicion de la foto real (troncos al frente, pared blanca a la derecha, ladrillo a la izquierda) mas que la del render, cuyo angulo es algo distinto (ventana negra y faroles en primer plano)."
+  },
+  {
+    "id": "foto-10",
+    "archivo": "ia/foto-10.jpg",
+    "base": "renders/foto-10.jpg",
+    "referencia": "fotos/foto-10.jpg",
+    "prompt": "Photorealistic completion of a 3D scan render. The FIRST reference image is the render: keep its exact camera viewpoint, composition, perspective and geometry. The SECOND reference image is a real photo of the same house: use it only as the reference for materials, colours and light. The house: white rendered walls, grey corrugated metal single-slope roof with a wide eave and exposed dark timber beams, black aluminium sliding glass doors and windows, a taller stone-clad gable volume at one end, beige tiled gallery with three steps, black lantern wall lights, a chimney. Surroundings: lawn with tall grass, red laterite soil, wire fence with concrete posts, a weathered wooden shed, trees and a palm tree, sunny day with blue sky and cumulus clouds. Fill in blurry or missing areas with plausible, consistent detail. No people, no text, no watermark. This view shows: the house facade seen from the lawn, partly hidden by a weathered grey wooden shed on the right, with a silver sedan car parked in the foreground, a black-framed window at the left of the white wall, tree trunks and branches framing the left and right sides and tall grass lawn.",
+    "estado": "ok",
+    "nota": "Generada con generate-image (LANDSCAPE_4_3); media id MAHYcDihi-c; exportada a JPG 1456x1088 (calidad 100, pro) desde la pagina 6 del diseno Canva DAHYapI_RKw. Verificada con sips y revisada visualmente. Salvedad: el prompt (escrito a partir de la foto real) pidio un sedan plateado y arboles en primer plano; el render NO tenia auto. El resultado sigue la composicion de la foto real (casa mas a la izquierda, galpon mas chico) y no la del render."
+  },
+  {
+    "id": "destino-calle",
+    "archivo": null,
+    "base": "renders/destino-calle.jpg",
+    "referencia": "fotos/foto-5.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No se genera aparte: equivale a foto-5, que esta pendiente (cuota de Canva agotada). Cuando exista ia/foto-5.jpg, usar ese archivo.",
+    "equivale_a": "foto-5"
+  },
+  {
+    "id": "destino-porton",
+    "archivo": null,
+    "base": "renders/destino-porton.jpg",
+    "referencia": "fotos/foto-4.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No se genera aparte: equivale a foto-4, que esta pendiente (cuota de Canva agotada). Cuando exista ia/foto-4.jpg, usar ese archivo.",
+    "equivale_a": "foto-4"
+  },
+  {
+    "id": "destino-galeria",
+    "archivo": null,
+    "base": "renders/destino-galeria.jpg",
+    "referencia": "fotos/foto-1.jpg",
+    "prompt": null,
+    "estado": "ok",
+    "nota": "No se genera aparte: equivale a foto-1 (usar ia/foto-1.jpg).",
+    "equivale_a": "foto-1"
+  },
+  {
+    "id": "destino-sala",
+    "archivo": null,
+    "base": "renders/destino-sala.jpg",
+    "referencia": "fotos/foto-1.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No generada: cuota de creditos de Canva agotada (quota_exceeded, intento del 2026-10-19 07:00 -03) antes de llegar a esta vista. Pendiente de reintentar; sus archivos aun no estan subidos a Canva."
+  },
+  {
+    "id": "destino-dormitorio",
+    "archivo": null,
+    "base": "renders/destino-dormitorio.jpg",
+    "referencia": "fotos/foto-6.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No generada: cuota de creditos de Canva agotada (quota_exceeded, intento del 2026-10-19 07:00 -03) antes de llegar a esta vista. Pendiente de reintentar; sus archivos aun no estan subidos a Canva."
+  },
+  {
+    "id": "destino-banio",
+    "archivo": null,
+    "base": "renders/destino-banio.jpg",
+    "referencia": "fotos/foto-9.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No generada: cuota de creditos de Canva agotada (quota_exceeded, intento del 2026-10-19 07:00 -03) antes de llegar a esta vista. Pendiente de reintentar; sus archivos aun no estan subidos a Canva."
+  },
+  {
+    "id": "destino-arboleda",
+    "archivo": null,
+    "base": "renders/destino-arboleda.jpg",
+    "referencia": "fotos/foto-8.jpg",
+    "prompt": null,
+    "estado": "error",
+    "nota": "No se genera aparte: equivale a foto-8, que esta pendiente (cuota de Canva agotada). Cuando exista ia/foto-8.jpg, usar ese archivo.",
+    "equivale_a": "foto-8"
+  }
+]
