@@ -282,12 +282,47 @@ async function iniciar() {
     });
   }
 
+  function cargarArchivoFoto(archivo) {
+    const url = URL.createObjectURL(archivo);
+    const imgTemp = new Image();
+    imgTemp.onload = () => {
+      const poseActual = controles.pose;
+      const fotoPersonalizada = {
+        n: 'cargada',
+        titulo: archivo.name,
+        archivo: url,
+        ancho: imgTemp.naturalWidth,
+        alto: imgTemp.naturalHeight,
+        fov: camara.fov,
+        x: poseActual.x,
+        z: poseActual.z,
+        yaw: poseActual.yaw,
+        pitch: poseActual.pitch,
+      };
+      comparador.abrir(fotoPersonalizada, 'foto');
+    };
+    imgTemp.src = url;
+  }
+
+  const botonCargarFoto = $('#boton-cargar-foto');
+  const inputFoto = $('#input-archivo-foto');
+  if (botonCargarFoto && inputFoto) {
+    botonCargarFoto.addEventListener('click', () => inputFoto.click());
+    inputFoto.addEventListener('change', (e) => {
+      const f = e.target.files?.[0];
+      if (f) cargarArchivoFoto(f);
+    });
+  }
+
   window.addEventListener('dragover', (e) => e.preventDefault());
   window.addEventListener('drop', (e) => {
     e.preventDefault();
     const f = e.dataTransfer?.files?.[0];
-    if (f && (f.name.endsWith('.ply') || f.name.endsWith('.ksplat'))) {
+    if (!f) return;
+    if (f.name.endsWith('.ply') || f.name.endsWith('.ksplat')) {
       cargarArchivoSplat(f);
+    } else if (f.type.startsWith('image/')) {
+      cargarArchivoFoto(f);
     }
   });
 

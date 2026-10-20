@@ -279,13 +279,13 @@ function construirLuces() {
  */
 export function crearModeloRelleno() {
   const mat = crearFabricaMateriales('relleno');
-  const h = herramientas(mat, false);
+  const h = herramientas(mat, true);
   const modelo = new THREE.Group();
   modelo.name = 'modelo-relleno';
   const entorno = new THREE.Group();
   entorno.name = 'entorno';
   entorno.add(construirSuelo(mat), construirGalpon(h), construirPorton(h), construirMurosVecinos(h), construirLuces());
-  const { casa } = construirCasa(mat, { retiro: RETIRO_RELLENO, conTexturas: false, conMobiliario: false });
+  const { casa } = construirCasa(mat, { retiro: RETIRO_RELLENO, conTexturas: true, conMobiliario: false });
   modelo.add(entorno, casa);
   return modelo;
 }

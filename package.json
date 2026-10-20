@@ -7,6 +7,7 @@
     "start": "npx --yes http-server . -p 8080 -c-1",
     "serve:visor": "npx --yes http-server visor -p 8080 -c-1",
     "assemble:ply": "./escaneo/unir-ply.sh",
+    "extract:textures": "python3 herramientas/extraer_texturas.py",
     "clean:ply": "python3 herramientas/clean_ply.py escaneo/casa.ply escaneo/casa_limpio.ply",
     "convert:ksplat": "node herramientas/convert.mjs escaneo/casa_limpio.ply visor/modelo/casa.ksplat 1 5 0"
   },

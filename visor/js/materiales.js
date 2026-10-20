@@ -124,7 +124,40 @@ const DIBUJOS = {
   },
 };
 
-const METROS_POR_MOSAICO = { piso: 1.2, ladrillo: 0.5, cesped: 2, tierra: 2 };
+const METROS_POR_MOSAICO = {
+  piso: 1.2,
+  ladrillo: 0.8,
+  cesped: 2.0,
+  tierra: 2.0,
+  piedra: 1.0,
+  pared: 1.5,
+  madera: 1.0,
+  techo: 1.0,
+  hormigon: 1.0,
+};
+
+const TEXTURAS_FOTO = new Set([
+  'piedra', 'piso', 'pared', 'madera', 'techo', 'ladrillo', 'hormigon', 'cesped', 'tierra',
+]);
+
+const cargadorTexturas = new THREE.TextureLoader();
+
+function cargarTexturaFotografica(nombre) {
+  if (!TEXTURAS_FOTO.has(nombre)) return null;
+  const escala = METROS_POR_MOSAICO[nombre] ?? 1.0;
+
+  const map = cargadorTexturas.load(`texturas/${nombre}.jpg`);
+  map.wrapS = map.wrapT = THREE.RepeatWrapping;
+  map.repeat.set(1 / escala, 1 / escala);
+  map.colorSpace = THREE.SRGBColorSpace;
+  map.anisotropy = 4;
+
+  const normalMap = cargadorTexturas.load(`texturas/${nombre}_normal.jpg`);
+  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+  normalMap.repeat.set(1 / escala, 1 / escala);
+
+  return { map, normalMap };
+}
 
 /**
  * Devuelve una función `material(nombre, extra)` con caché, según el modo.
@@ -132,34 +165,66 @@ const METROS_POR_MOSAICO = { piso: 1.2, ladrillo: 0.5, cesped: 2, tierra: 2 };
  */
 export function crearFabricaMateriales(modo = 'maqueta') {
   const cache = new Map();
-  const texturas = new Map();
-  const obtenerTextura = (nombre) => {
-    if (!texturas.has(nombre) && DIBUJOS[nombre]) {
-      texturas.set(nombre, textura(METROS_POR_MOSAICO[nombre] ?? 1, DIBUJOS[nombre]));
+  const texturasProcedurales = new Map();
+  const texturasFotograficas = new Map();
+
+  const obtenerProcedural = (nombre) => {
+    if (!texturasProcedurales.has(nombre) && DIBUJOS[nombre]) {
+      texturasProcedurales.set(nombre, textura(METROS_POR_MOSAICO[nombre] ?? 1, DIBUJOS[nombre]));
     }
-    return texturas.get(nombre) ?? null;
+    return texturasProcedurales.get(nombre) ?? null;
+  };
+
+  const obtenerFotografica = (nombre) => {
+    if (!texturasFotograficas.has(nombre)) {
+      texturasFotograficas.set(nombre, cargarTexturaFotografica(nombre));
+    }
+    return texturasFotograficas.get(nombre);
   };
 
   return function material(nombre, extra = {}) {
     const clave = nombre + JSON.stringify(extra);
     if (cache.has(clave)) return cache.get(clave);
+
     let m;
+    const foto = obtenerFotografica(nombre);
+
     if (modo === 'relleno') {
+      // Modo relleno: usa la textura fotográfica real con desplazamiento de profundidad para asomar en los huecos del splat
+      const map = foto?.map ?? obtenerProcedural(nombre);
       m = new THREE.MeshLambertMaterial({
-        color: COLORES[nombre], side: THREE.DoubleSide, polygonOffset: true,
-        polygonOffsetFactor: DESPLAZAMIENTO_PROFUNDIDAD.factor, polygonOffsetUnits: DESPLAZAMIENTO_PROFUNDIDAD.unidades,
+        color: map ? 0xffffff : COLORES[nombre],
+        map: map ?? null,
+        side: THREE.DoubleSide,
+        polygonOffset: true,
+        polygonOffsetFactor: DESPLAZAMIENTO_PROFUNDIDAD.factor,
+        polygonOffsetUnits: DESPLAZAMIENTO_PROFUNDIDAD.unidades,
         ...extra,
       });
     } else if (nombre === 'vidrio' || nombre === 'agua') {
       m = new THREE.MeshPhysicalMaterial({
-        color: COLORES[nombre], transparent: true, opacity: nombre === 'agua' ? 0.8 : 0.45,
-        roughness: 0.1, metalness: 0.1, side: THREE.DoubleSide, ...extra,
+        color: COLORES[nombre],
+        transparent: true,
+        opacity: nombre === 'agua' ? 0.8 : 0.45,
+        roughness: 0.1,
+        metalness: 0.1,
+        side: THREE.DoubleSide,
+        ...extra,
       });
     } else {
-      const map = obtenerTextura(nombre);
+      // Modo maqueta: materiales PBR completos con difuso fotográfico y mapas de normales
+      const map = foto?.map ?? obtenerProcedural(nombre);
+      const normalMap = foto?.normalMap ?? null;
+
       m = new THREE.MeshStandardMaterial({
-        color: map ? 0xffffff : COLORES[nombre], map, roughness: nombre === 'techo' ? 0.55 : 0.9,
-        metalness: nombre === 'techo' ? 0.35 : 0, side: THREE.DoubleSide, ...extra,
+        color: map ? 0xffffff : COLORES[nombre],
+        map: map ?? null,
+        normalMap: normalMap ?? null,
+        normalScale: new THREE.Vector2(0.85, 0.85),
+        roughness: nombre === 'techo' ? 0.45 : (nombre === 'piso' ? 0.4 : 0.85),
+        metalness: nombre === 'techo' ? 0.35 : (nombre === 'piso' ? 0.05 : 0),
+        side: THREE.DoubleSide,
+        ...extra,
       });
     }
     cache.set(clave, m);

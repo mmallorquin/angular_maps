@@ -10,6 +10,7 @@ node --max-old-space-size=8192 convert.mjs casa_limpio.ply ../visor/modelo/casa.
 python3 maps.py ../casa3d.ply ./map 12                        # genera map_pts.npy / map_rgb.npy (puntos sólidos en coordenadas de mundo)
 python3 terrain.py ../visor                                   # datos/terreno.json (grilla caminable) y terreno_debug.png
 python3 minimapa.py ../visor/datos/mapa.png                   # imagen del mini plano
+python3 extraer_texturas.py                                   # extrae texturas fotográficas PBR (difuso y normal) de las fotos
 ```
 
 `plan_maps.py` y `zoom_maps.py` dibujan planos cenitales con grilla (piso, paredes, techo) para

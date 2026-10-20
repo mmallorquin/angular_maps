@@ -41,6 +41,10 @@ export class Comparador {
     this.control = panel.querySelector('input[type="range"]');
     this.etiqueta = panel.querySelector('.etiqueta');
     this.control.addEventListener('input', () => this.aplicarOpacidad());
+    this.botonDiferencia = panel.querySelector('[data-accion="diferencia"]');
+    if (this.botonDiferencia) {
+      this.botonDiferencia.addEventListener('click', () => this.conmutarDiferencia());
+    }
     panel.querySelector('[data-accion="foto"]').addEventListener('click', () => this.fijarOpacidad(1));
     panel.querySelector('[data-accion="mitad"]').addEventListener('click', () => this.fijarOpacidad(OPACIDAD_INICIAL));
     panel.querySelector('[data-accion="3d"]').addEventListener('click', () => this.fijarOpacidad(0));
@@ -100,11 +104,20 @@ export class Comparador {
     }
   }
 
+  conmutarDiferencia() {
+    const activa = this.imagen.classList.toggle('modo-diferencia');
+    if (this.botonDiferencia) {
+      this.botonDiferencia.classList.toggle('activo', activa);
+    }
+  }
+
   cerrar() {
     if (!this.foto) return;
     this.foto = null;
     this.panel.hidden = true;
     this.imagen.classList.remove('visible');
+    this.imagen.classList.remove('modo-diferencia');
+    if (this.botonDiferencia) this.botonDiferencia.classList.remove('activo');
     this.marco.classList.remove('visible');
     this.camara.fov = this.fovOriginal;
     this.camara.updateProjectionMatrix();

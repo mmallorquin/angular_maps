@@ -173,6 +173,10 @@ button.ficha-foto { padding: 4px 8px; font-size: 13px; }
   display: none;
 }
 #foto-superpuesta.visible { display: block; }
+#foto-superpuesta.modo-diferencia {
+  mix-blend-mode: difference;
+  opacity: 1 !important;
+}
 #marco-foto {
   position: fixed;
   z-index: 4;

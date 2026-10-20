@@ -33,6 +33,8 @@
   <button id="boton-completar" title="Mostrar u ocultar la casa de relleno (paredes, techo, hastial) que completa lo que el escaneo no captó">Completar casa</button>
   <a class="boton" href="maqueta.html" title="Maqueta 3D del lote: formas, materiales y propuestas a futuro">Maqueta 3D</a>
   <a class="boton" href="../index.html" title="Volver al mapa interactivo">🗺️ Mapa</a>
+  <button id="boton-cargar-foto" title="Cargar una foto (.jpg, .png) para compararla y calibrar el 3D">📷 Cargar Foto</button>
+  <input type="file" id="input-archivo-foto" accept="image/jpeg,image/png,image/webp" style="display:none">
   <button id="boton-cargar-ply" title="Cargar otro archivo .PLY o .KSPLAT desde tu computadora">📂 Cargar .PLY</button>
   <input type="file" id="input-archivo-ply" accept=".ply,.ksplat" style="display:none">
   <button id="boton-ayuda" title="Mostrar u ocultar la ayuda" aria-label="Ayuda" aria-controls="ayuda">?</button>
@@ -68,6 +70,7 @@
     <button data-accion="foto">Foto</button>
     <span class="etiqueta">50%</span>
     <button data-accion="mitad" title="Mezcla al 50 %" aria-label="Mezcla al 50 por ciento">½</button>
+    <button data-accion="diferencia" id="boton-diferencia" title="Modo diferencia: resalta en colores las discrepancias entre el 3D y la foto">Diferencia</button>
   </div>
 </div>
 
