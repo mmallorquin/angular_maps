@@ -1,0 +1,88 @@
+:root {
+  --fondo: #0f1512;
+  --texto: #eef1ea;
+  --panel: rgba(10, 16, 12, 0.82);
+  --borde: rgba(255, 255, 255, 0.14);
+  --acento: #9bd98a;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--fondo);
+  color: var(--texto);
+  font: 13px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+}
+
+#escena {
+  position: fixed;
+  inset: 0;
+}
+#escena canvas { display: block; width: 100%; height: 100%; }
+
+#foto {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  opacity: 0.5;
+}
+#foto[hidden] { display: none; }
+
+.panel {
+  position: fixed;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 8px 10px;
+  backdrop-filter: blur(6px);
+}
+#hud {
+  left: 10px;
+  top: 10px;
+  font-family: ui-monospace, Menlo, monospace;
+  white-space: pre;
+}
+#panel {
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+#panel .fila { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+#panel .ayuda { opacity: 0.8; }
+kbd {
+  border: 1px solid var(--borde);
+  border-radius: 3px;
+  padding: 0 4px;
+  margin: 0 1px;
+  font-family: inherit;
+}
+button, select {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+body.sin-ui #panel, body.sin-ui #hud { display: none; }
+
+/* Vista lado a lado (lado=1): maqueta a la izquierda, foto a la derecha, con grilla cada 50 px. */
+body.lado #escena { width: 50%; }
+body.lado #foto { left: 50%; width: 50%; opacity: 1 !important; }
+body.lado #grilla {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255, 80, 80, 0.55) 0 1px, transparent 1px 50px),
+    repeating-linear-gradient(0deg, rgba(255, 80, 80, 0.55) 0 1px, transparent 1px 50px);
+  background-size: 50% 100%, 100% 100%;
+}

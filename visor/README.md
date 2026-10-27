@@ -39,9 +39,11 @@ python3 -m http.server 8080 --directory visor
 | `modelo/casa.ksplat` | Escaneo limpio y comprimido (448 k splats, 10,8 MB) generado a partir de `casa3d.ply` |
 | `datos/terreno.json` | Grilla de 0,5 m con la altura del piso y las celdas bloqueadas (paredes, árboles) |
 | `datos/mapa.png` | Imagen cenital para el mini plano (10 px por metro, origen en X=-8, Z=-22) |
-| `fotos/` | Las 10 fotos reales |
-| `js/lugares.js` | Coordenadas de los destinos y de cada foto (se ajustan a mano) |
-| `js/modelo.js` | Modelo de relleno: medidas tomadas de la nube de puntos (plano de fachada, alero, cumbrera, piso) |
+| `fotos/` | Las 13 fotos reales (11: hastial de cerca, 12: ventanal y chimenea, 13: fachada de noche) |
+| `js/lugares.js` | Coordenadas de los destinos y de cada foto, con el FOV sacado del EXIF de cada toma (se calibran con `comparar.html`) |
+| `js/medidas.js` | Todas las medidas de la casa y el lote en metros (planta del escaneo; alturas y despieces de las fotos) |
+| `js/modelo.js` | Arma el modelo con `geometria.js` (bloques, prismas, aberturas, faroles), `casa-cuerpo.js` (pisos, paredes, techo, interior), `casa-hastial.js` (portal pentagonal) y `entorno.js` (galpón, portón, alambrado, muros, suelo) |
+| `comparar.html` | Calibrador: maqueta en primera persona superpuesta a cada foto (ver abajo) |
 | `datos/ficha-casa.json` / `.md` | Características de la casa y el lote extraídas de las fotos |
 | `renders/` | Capturas base del escaneo en cada vista (insumo para las imágenes IA) |
 | `ia/` | Vistas completadas con IA (`indice.json` dice cuáles están y cuáles faltan) |
@@ -60,9 +62,25 @@ Abrí la consola del navegador y usá `visor.pose()` para leer la posición actu
 `visor.ir(x, z, yaw, pitch)` para saltar a una pose y `visor.hud()` para ver las
 coordenadas en pantalla. Después copiá los valores a `js/lugares.js`.
 
+## Comparar la maqueta con las fotos (`comparar.html`)
+
+Abre la maqueta paramétrica con la cámara en la pose de una foto y la foto superpuesta con
+opacidad ajustable. Sirve para que el modelo sea fiel desde todos los ángulos: si un borde del 3D no
+cae sobre el de la foto, se corrige la medida en `js/medidas.js` o la pose en `js/lugares.js`.
+
+- `comparar.html?foto=6` abre la foto 6; `&op=0.5` fija la opacidad; `&lado=1` pone maqueta y foto
+  una al lado de la otra con una grilla; `&arboles=0` oculta los árboles; `&ui=0` esconde los paneles.
+- `W A S D` mueve la cámara, `Q`/`E` baja y sube, las flechas giran, `[`/`]` cambian el FOV,
+  `Shift` da pasos grandes, `1`/`2`/`3` muestran 3D, mezcla o foto. **Copiar pose** deja en el
+  portapapeles la línea lista para pegar en `js/lugares.js`.
+- Desde la terminal, `npm run render:vistas -- --fotos 1,6,11` guarda en `renders/maqueta/` las
+  vistas 3D, mezcla, foto y lado a lado de cada toma (requiere Playwright: `npm i -D playwright &&
+  npx playwright install chromium`). `npm run verificar` abre el recorrido, la maqueta y el
+  comparador sin cabeza y falla si hay errores de consola o de red.
+
 ## Maqueta 3D (`maqueta.html`)
 
-Representación en three.js de formas y posiciones (no exacta) con los materiales de la ficha:
+Representación en three.js con las medidas calibradas contra las 13 fotos y los materiales de la ficha:
 casa con techo desmontable e interior (sala/cocina, dormitorio, baño), hastial de piedra,
 galería, galpón, portón y alambrado, muros vecinos, árboles en las posiciones detectadas en el
 escaneo (`datos/arboles.json`) y contorno aproximado del lote de 24 × 30 m. Vistas Aérea / Frente /

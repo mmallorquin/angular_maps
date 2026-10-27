@@ -18,3 +18,8 @@ yarn-error.log*
 # El escaneo .ply completo versionado está en escaneo/casa.ply.part* (<90MB c/u)
 *.ply
 !escaneo/casa.ply.part*
+
+# Renders de comparación generados con herramientas/render-vistas.mjs (se regeneran en segundos)
+visor/renders/maqueta/
+# Fotos originales a resolución completa (2-6 MB cada una; herramientas/extraer_texturas.py las busca en ../fotos-originales)
+fotos-originales/

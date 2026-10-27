@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casa · comparar maqueta con fotos</title>
+<link rel="stylesheet" href="css/comparar.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./lib/three.module.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="escena"></div>
+<img id="foto" alt="">
+<div id="grilla"></div>
+<div id="hud" class="panel"></div>
+<div id="panel" class="panel">
+  <div class="fila">
+    <label>Foto <select id="selector-foto"></select></label>
+    <label>Foto <input id="opacidad" type="range" min="0" max="100" value="50"> <span id="opacidad-valor">50%</span></label>
+    <button id="boton-copiar" title="Copiar la pose actual en el formato de js/lugares.js">Copiar pose</button>
+  </div>
+  <div class="ayuda">
+    <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> mover · <kbd>Q</kbd>/<kbd>E</kbd> bajar/subir · flechas girar ·
+    <kbd>[</kbd>/<kbd>]</kbd> FOV · <kbd>Shift</kbd> paso grande · <kbd>1</kbd> 3D · <kbd>2</kbd> mezcla · <kbd>3</kbd> foto
+  </div>
+</div>
+<script type="module" src="js/comparar.js"></script>
+</body>
+</html>

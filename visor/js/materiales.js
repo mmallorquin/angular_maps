@@ -2,20 +2,26 @@ import * as THREE from 'three';
 
 /**
  * Materiales de la casa y el lote. Colores tomados de datos/ficha-casa.json (relevamiento de las fotos).
+ * Los materiales con foto usan los recortes de visor/texturas/ (herramientas/extraer_texturas.py);
+ * el resto se dibuja en un canvas (1 mosaico = METROS_POR_MOSAICO metros).
  * Dos modos:
- *  - 'relleno': colores planos (Lambert) con desplazamiento de profundidad, para asomar entre los splats del visor.
- *  - 'maqueta': texturas procedurales dibujadas en canvas (1 unidad UV = 1 m), con sombras, para la maqueta 3D.
+ *  - 'relleno': sin sombras y con desplazamiento de profundidad, para asomar entre los splats del visor.
+ *  - 'maqueta': PBR con sombras, para la maqueta 3D y el comparador.
  */
 
 export const COLORES = {
-  pared: 0xeeeeea, cielorraso: 0xece9e1, techo: 0x3a3e43, piedra: 0xcdbba0, piso: 0xe9dcc0,
-  interior: 0xe6e3dc, marco: 0x17181a, vidrio: 0x7d99ad, viga: 0x2a2a2a, madera: 0x8a8278,
-  hormigon: 0x9b9a92, chapaNegra: 0x1e1e1e, ladrillo: 0xa4573f, cesped: 0x5c9a3a, tierra: 0x9e4a2e,
-  farol: 0x111111, agua: 0x3fa4c9, mortero: 0x8d8678,
+  pared: 0xeeeeea, cielorraso: 0xd8dadb, techo: 0x50555b, piedra: 0xcdbba0, piso: 0xe9dcc0,
+  interior: 0xe6e3dc, marco: 0x17181a, vidrio: 0x2f3d4a, viga: 0x1a1a1a, madera: 0x837d72,
+  hormigon: 0x9b9a92, chapaNegra: 0x1c1e21, ladrillo: 0xa4573f, cesped: 0x5c9a3a, tierra: 0x9e4a2e,
+  farol: 0x111111, agua: 0x3fa4c9, mortero: 0x8d8678, cenefa: 0x15171a, zocalo: 0xcfc8b8,
+  vidrioEsmerilado: 0xbfc8cc, farolVidrio: 0xfff1c8, granito: 0x48494c, heladera: 0xf2f2f0,
+  acero: 0xb9bcc0, cobertor: 0xd8b648, cortina: 0x98a9b3, revoqueViejo: 0x9a958a, revoqueGris: 0x727c88,
+  antena: 0xf4f4f4, arena: 0xd8c7a3, techoGalpon: 0x6b7076, alambre: 0xaeb3b6,
 };
 
 const DESPLAZAMIENTO_PROFUNDIDAD = { factor: 1.5, unidades: 30000 };
 const TAMANIO_LIENZO = 256;
+const TINTE_TEXTURA = { techo: 0xb4b8bc, cesped: 0xd9e4cc };   // la chapa sale clara por el reflejo del cielo
 
 function hex(c) {
   return `#${c.toString(16).padStart(6, '0')}`;
@@ -28,10 +34,14 @@ function mezclar(base, delta) {
 }
 
 /** Textura repetible dibujada en un canvas; `metros` es el tamaño del mosaico en el mundo. */
-function textura(metros, dibujar) {
+function textura(metros, dibujar, transparente = false) {
   const lienzo = document.createElement('canvas');
   lienzo.width = lienzo.height = TAMANIO_LIENZO;
   const ctx = lienzo.getContext('2d');
+  if (!transparente) {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, TAMANIO_LIENZO, TAMANIO_LIENZO);
+  }
   dibujar(ctx, TAMANIO_LIENZO);
   const tex = new THREE.CanvasTexture(lienzo);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
@@ -53,115 +63,108 @@ function ruido(ctx, n, base, amplitud, cantidad = 1500, radio = 3) {
 }
 
 const DIBUJOS = {
-  pared: (ctx, n) => ruido(ctx, n, COLORES.pared, 0.05, 2500, 1.5),
+  pared: (ctx, n) => ruido(ctx, n, COLORES.pared, 0.04, 2500, 1.5),
   interior: (ctx, n) => ruido(ctx, n, COLORES.interior, 0.03, 1200, 2),
-  hormigon: (ctx, n) => ruido(ctx, n, COLORES.hormigon, 0.08, 2000, 2),
-  cesped: (ctx, n) => ruido(ctx, n, COLORES.cesped, 0.16, 4000, 2),
-  tierra: (ctx, n) => ruido(ctx, n, COLORES.tierra, 0.12, 3000, 2.5),
-  techo: (ctx, n) => {                       // chapa acanalada: ondas de 0,1 m en 1 m
-    const ondas = 10;
+  revoqueViejo: (ctx, n) => ruido(ctx, n, COLORES.revoqueViejo, 0.18, 2500, 4),
+  revoqueGris: (ctx, n) => ruido(ctx, n, COLORES.revoqueGris, 0.08, 1500, 3),
+  arena: (ctx, n) => ruido(ctx, n, COLORES.arena, 0.06, 1500, 2),
+  techo: (ctx, n) => {                       // chapa trapezoidal gris grafito: nervios cada 0,2 m en 1 m
+    const ondas = 5;
     for (let i = 0; i < ondas; i++) {
       const g = ctx.createLinearGradient((i * n) / ondas, 0, ((i + 1) * n) / ondas, 0);
-      g.addColorStop(0, mezclar(COLORES.techo, -0.06));
-      g.addColorStop(0.5, mezclar(COLORES.techo, 0.08));
-      g.addColorStop(1, mezclar(COLORES.techo, -0.06));
+      g.addColorStop(0, mezclar(COLORES.techo, -0.04));
+      g.addColorStop(0.35, mezclar(COLORES.techo, 0.1));
+      g.addColorStop(0.5, mezclar(COLORES.techo, 0.16));
+      g.addColorStop(0.65, mezclar(COLORES.techo, 0.1));
+      g.addColorStop(1, mezclar(COLORES.techo, -0.04));
       ctx.fillStyle = g;
       ctx.fillRect((i * n) / ondas, 0, n / ondas + 1, n);
     }
   },
-  chapaNegra: (ctx, n) => {
-    const ondas = 12;
+  chapaNegra: (ctx, n) => {                  // panel acanalado negro mate: nervios cada 0,1 m en 1 m
+    const nervios = 10;
+    for (let i = 0; i < nervios; i++) {
+      const g = ctx.createLinearGradient((i * n) / nervios, 0, ((i + 1) * n) / nervios, 0);
+      g.addColorStop(0, mezclar(COLORES.chapaNegra, -0.03));
+      g.addColorStop(0.3, mezclar(COLORES.chapaNegra, 0.07));
+      g.addColorStop(0.55, mezclar(COLORES.chapaNegra, -0.02));
+      g.addColorStop(1, mezclar(COLORES.chapaNegra, -0.04));
+      ctx.fillStyle = g;
+      ctx.fillRect((i * n) / nervios, 0, n / nervios + 1, n);
+    }
+  },
+  techoGalpon: (ctx, n) => {
+    const ondas = 10;
     for (let i = 0; i < ondas; i++) {
-      ctx.fillStyle = i % 2 ? '#2a2a2a' : '#141414';
+      const g = ctx.createLinearGradient((i * n) / ondas, 0, ((i + 1) * n) / ondas, 0);
+      g.addColorStop(0, mezclar(COLORES.techoGalpon, -0.08));
+      g.addColorStop(0.5, mezclar(COLORES.techoGalpon, 0.1));
+      g.addColorStop(1, mezclar(COLORES.techoGalpon, -0.08));
+      ctx.fillStyle = g;
       ctx.fillRect((i * n) / ondas, 0, n / ondas + 1, n);
     }
   },
-  piedra: (ctx, n) => {                      // laja irregular crema con junta oscura, mosaico de 1 m
-    ctx.fillStyle = hex(COLORES.mortero);
+  piso: (ctx, n) => {                        // porcelanato crema de 0,6 m con manchas de tierra: mosaico de 1,2 m (2x2)
+    ctx.fillStyle = '#d6cbb0';
     ctx.fillRect(0, 0, n, n);
-    for (let i = 0; i < 26; i++) {
-      const cx = Math.random() * n; const cy = Math.random() * n;
-      const r = n * (0.07 + Math.random() * 0.08);
-      ctx.fillStyle = mezclar(COLORES.piedra, (Math.random() - 0.5) * 0.14);
+    for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) {
+      ctx.fillStyle = mezclar(COLORES.piso, (Math.random() - 0.5) * 0.05);
+      ctx.fillRect(i * n / 2 + 2, j * n / 2 + 2, n / 2 - 4, n / 2 - 4);
+    }
+    for (let k = 0; k < 14; k++) {
+      ctx.fillStyle = `rgba(216,168,112,${0.08 + Math.random() * 0.14})`;
       ctx.beginPath();
-      for (let k = 0; k < 7; k++) {
-        const ang = (k / 7) * Math.PI * 2;
-        const rr = r * (0.7 + Math.random() * 0.5);
-        ctx.lineTo(cx + Math.cos(ang) * rr, cy + Math.sin(ang) * rr * 0.75);
-      }
-      ctx.closePath();
+      ctx.ellipse(Math.random() * n, Math.random() * n, 6 + Math.random() * 18, 4 + Math.random() * 10, Math.random() * 3, 0, Math.PI * 2);
       ctx.fill();
     }
   },
-  piso: (ctx, n) => {                        // porcelanato de 0,6 m: mosaico de 1,2 m con 2x2 piezas
-    ctx.fillStyle = '#cfc2a6';
-    ctx.fillRect(0, 0, n, n);
-    for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) {
-      ctx.fillStyle = mezclar(COLORES.piso, (Math.random() - 0.5) * 0.04);
-      ctx.fillRect(i * n / 2 + 2, j * n / 2 + 2, n / 2 - 4, n / 2 - 4);
-    }
-  },
-  madera: (ctx, n) => {                      // tablas verticales de 0,12 m, mosaico de 1 m
-    const tablas = 8;
-    for (let i = 0; i < tablas; i++) {
-      ctx.fillStyle = mezclar(COLORES.madera, (Math.random() - 0.5) * 0.14);
-      ctx.fillRect((i * n) / tablas, 0, n / tablas - 1, n);
-      ctx.fillStyle = 'rgba(0,0,0,0.25)';
-      ctx.fillRect(((i + 1) * n) / tablas - 2, 0, 2, n);
-    }
-  },
-  ladrillo: (ctx, n) => {                    // ladrillos de 0,25 x 0,07 m, mosaico de 0,5 m
-    ctx.fillStyle = '#b9ad98';
-    ctx.fillRect(0, 0, n, n);
-    const filas = 7; const altoFila = n / filas; const ancho = n / 2;
-    for (let f = 0; f < filas; f++) {
-      const corrimiento = f % 2 ? ancho / 2 : 0;
-      for (let c = -1; c < 3; c++) {
-        ctx.fillStyle = mezclar(COLORES.ladrillo, (Math.random() - 0.5) * 0.12);
-        ctx.fillRect(c * ancho + corrimiento + 2, f * altoFila + 2, ancho - 4, altoFila - 4);
-      }
+  alambre: (ctx, n) => {                     // tejido romboidal: rombos de 6 cm en un mosaico de 0,5 m
+    ctx.clearRect(0, 0, n, n);
+    ctx.strokeStyle = 'rgba(200,205,208,0.9)';
+    ctx.lineWidth = 1.5;
+    const paso = n / 8;
+    for (let i = -8; i < 16; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * paso, 0);
+      ctx.lineTo(i * paso + n, n);
+      ctx.moveTo(i * paso, 0);
+      ctx.lineTo(i * paso - n, n);
+      ctx.stroke();
     }
   },
 };
 
 const METROS_POR_MOSAICO = {
-  piso: 1.2,
-  ladrillo: 0.8,
-  cesped: 2.0,
-  tierra: 2.0,
-  piedra: 1.0,
-  pared: 1.5,
-  madera: 1.0,
-  techo: 1.0,
-  hormigon: 1.0,
+  piso: 1.2, ladrillo: 2.0, cesped: 2.5, tierra: 1.5, piedra: 1.1, pared: 0.8, madera: 1.3, techo: 1.0,
+  hormigon: 0.45, chapaNegra: 1.0, interior: 1.5, revoqueViejo: 1.5, revoqueGris: 1.5, arena: 1.0,
+  techoGalpon: 1.0, alambre: 0.5,
 };
 
-const TEXTURAS_FOTO = new Set([
-  'piedra', 'piso', 'pared', 'madera', 'techo', 'ladrillo', 'hormigon', 'cesped', 'tierra',
-]);
+const TEXTURAS_FOTO = new Set(['piedra', 'madera', 'ladrillo', 'hormigon', 'cesped', 'tierra']);
+const CON_NORMALES = new Set(['piedra', 'madera', 'ladrillo']);
+const RUGOSIDAD = { techo: 0.55, piso: 0.35, vidrio: 0.15, granito: 0.3, acero: 0.3, heladera: 0.4, farol: 0.6, marco: 0.5, cenefa: 0.5, interior: 0.6 };
+const METALICIDAD = { techo: 0.1, acero: 0.8, vidrio: 0.2, farol: 0.3, marco: 0.3 };
+const TRANSPARENTES = { vidrio: 0.55, vidrioEsmerilado: 0.7, agua: 0.8, alambre: 1.0, farolVidrio: 0.6 };
 
 const cargadorTexturas = new THREE.TextureLoader();
 
 function cargarTexturaFotografica(nombre) {
   if (!TEXTURAS_FOTO.has(nombre)) return null;
   const escala = METROS_POR_MOSAICO[nombre] ?? 1.0;
-
-  const map = cargadorTexturas.load(`texturas/${nombre}.jpg`);
-  map.wrapS = map.wrapT = THREE.RepeatWrapping;
-  map.repeat.set(1 / escala, 1 / escala);
-  map.colorSpace = THREE.SRGBColorSpace;
-  map.anisotropy = 4;
-
-  const normalMap = cargadorTexturas.load(`texturas/${nombre}_normal.jpg`);
-  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-  normalMap.repeat.set(1 / escala, 1 / escala);
-
+  const preparar = (tex, esColor) => {
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(1 / escala, 1 / escala);
+    if (esColor) tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 4;
+    return tex;
+  };
+  const map = preparar(cargadorTexturas.load(`texturas/${nombre}.jpg`), true);
+  const normalMap = CON_NORMALES.has(nombre) ? preparar(cargadorTexturas.load(`texturas/${nombre}_normal.jpg`), false) : null;
   return { map, normalMap };
 }
 
 /**
  * Devuelve una función `material(nombre, extra)` con caché, según el modo.
- * `metrosPorMosaico(nombre)` sirve para escalar UVs (1 unidad = 1 m).
  */
 export function crearFabricaMateriales(modo = 'maqueta') {
   const cache = new Map();
@@ -170,61 +173,46 @@ export function crearFabricaMateriales(modo = 'maqueta') {
 
   const obtenerProcedural = (nombre) => {
     if (!texturasProcedurales.has(nombre) && DIBUJOS[nombre]) {
-      texturasProcedurales.set(nombre, textura(METROS_POR_MOSAICO[nombre] ?? 1, DIBUJOS[nombre]));
+      texturasProcedurales.set(nombre, textura(METROS_POR_MOSAICO[nombre] ?? 1, DIBUJOS[nombre], nombre === 'alambre'));
     }
     return texturasProcedurales.get(nombre) ?? null;
   };
 
   const obtenerFotografica = (nombre) => {
-    if (!texturasFotograficas.has(nombre)) {
-      texturasFotograficas.set(nombre, cargarTexturaFotografica(nombre));
-    }
+    if (!texturasFotograficas.has(nombre)) texturasFotograficas.set(nombre, cargarTexturaFotografica(nombre));
     return texturasFotograficas.get(nombre);
   };
 
   return function material(nombre, extra = {}) {
+    if (!(nombre in COLORES)) throw new Error(`Material desconocido: ${nombre}`);
     const clave = nombre + JSON.stringify(extra);
     if (cache.has(clave)) return cache.get(clave);
 
-    let m;
     const foto = obtenerFotografica(nombre);
-
+    const map = foto?.map ?? obtenerProcedural(nombre);
+    const color = map ? (TINTE_TEXTURA[nombre] ?? 0xffffff) : COLORES[nombre];
+    const opacidad = TRANSPARENTES[nombre];
+    const comunes = {
+      color, map: map ?? null, side: THREE.DoubleSide,
+      transparent: opacidad !== undefined, opacity: opacidad ?? 1,
+      alphaTest: nombre === 'alambre' ? 0.3 : 0,
+      ...extra,
+    };
+    let m;
     if (modo === 'relleno') {
-      // Modo relleno: usa la textura fotográfica real con desplazamiento de profundidad para asomar en los huecos del splat
-      const map = foto?.map ?? obtenerProcedural(nombre);
       m = new THREE.MeshLambertMaterial({
-        color: map ? 0xffffff : COLORES[nombre],
-        map: map ?? null,
-        side: THREE.DoubleSide,
+        ...comunes,
         polygonOffset: true,
         polygonOffsetFactor: DESPLAZAMIENTO_PROFUNDIDAD.factor,
         polygonOffsetUnits: DESPLAZAMIENTO_PROFUNDIDAD.unidades,
-        ...extra,
-      });
-    } else if (nombre === 'vidrio' || nombre === 'agua') {
-      m = new THREE.MeshPhysicalMaterial({
-        color: COLORES[nombre],
-        transparent: true,
-        opacity: nombre === 'agua' ? 0.8 : 0.45,
-        roughness: 0.1,
-        metalness: 0.1,
-        side: THREE.DoubleSide,
-        ...extra,
       });
     } else {
-      // Modo maqueta: materiales PBR completos con difuso fotográfico y mapas de normales
-      const map = foto?.map ?? obtenerProcedural(nombre);
-      const normalMap = foto?.normalMap ?? null;
-
       m = new THREE.MeshStandardMaterial({
-        color: map ? 0xffffff : COLORES[nombre],
-        map: map ?? null,
-        normalMap: normalMap ?? null,
-        normalScale: new THREE.Vector2(0.85, 0.85),
-        roughness: nombre === 'techo' ? 0.45 : (nombre === 'piso' ? 0.4 : 0.85),
-        metalness: nombre === 'techo' ? 0.35 : (nombre === 'piso' ? 0.05 : 0),
-        side: THREE.DoubleSide,
-        ...extra,
+        ...comunes,
+        normalMap: foto?.normalMap ?? null,
+        normalScale: new THREE.Vector2(0.7, 0.7),
+        roughness: RUGOSIDAD[nombre] ?? 0.85,
+        metalness: METALICIDAD[nombre] ?? 0,
       });
     }
     cache.set(clave, m);

@@ -6,69 +6,57 @@ y genera mapas difusos (color) y de normales (relieve) con bordes continuos (sea
 
 import os
 import numpy as np
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageOps
 
 FOTOS_DIR = os.path.join(os.path.dirname(__file__), '../visor/fotos')
+# Fotos originales a resolución completa (no se versionan: pesan 2-6 MB cada una). Si no están, se usa
+# la versión de visor/fotos/ escalando la caja de recorte.
+ORIGINALES_DIR = os.environ.get('FOTOS_ORIGINALES', os.path.join(os.path.dirname(__file__), '../../fotos-originales'))
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '../visor/texturas')
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Coordenadas [x0, y0, x1, y1] ajustadas para cada material
+# Recortes [x0, y0, x1, y1] en píxeles de la foto original ya rotada según su EXIF (ancho x alto de
+# 'tamano'). Se eligieron zonas planas, de frente y con luz pareja. 'escala_m' es el tamaño real del
+# recorte en metros (1 mosaico = escala_m x escala_m).
 MATERIALES = {
-    'piedra': {
-        'foto': 'foto-2.jpg',
-        'caja': (780, 680, 1060, 960),
-        'escala_m': 1.0,
-        'normal_fuerza': 2.5
+    'piedra': {  # laja crema del hastial, de frente desde la calle (foto 3 original, 4032x3024)
+        'foto': 'foto-3.jpg', 'original': 'IMG_2445.jpeg', 'tamano': (4032, 3024),
+        'caja': (2190, 1380, 2370, 1560), 'escala_m': 1.1, 'normal_fuerza': 2.0,
     },
-    'piso': {
-        'foto': 'foto-1.jpg',
-        'caja': (320, 920, 650, 1100),
-        'escala_m': 1.2,
-        'normal_fuerza': 1.2
+    'madera': {  # tablas grises del galpón (foto 10)
+        'foto': 'foto-10.jpg', 'original': 'IMG_2449.jpeg', 'tamano': (4032, 3024),
+        'caja': (2400, 1400, 3000, 2000), 'escala_m': 1.3, 'normal_fuerza': 1.6,
     },
-    'pared': {
-        'foto': 'foto-6.jpg',
-        'caja': (1050, 380, 1280, 600),
-        'escala_m': 1.5,
-        'normal_fuerza': 1.0
+    'hormigon': {  # pilar central del portón (foto 4 original, 4032x3024)
+        'foto': 'foto-4.jpg', 'original': 'IMG_2446.jpeg', 'tamano': (4032, 3024),
+        'caja': (870, 1500, 1090, 1720), 'escala_m': 0.45, 'normal_fuerza': 1.0,
     },
-    'madera': {
-        'foto': 'foto-10.jpg',
-        'caja': (1300, 650, 1600, 950),
-        'escala_m': 1.0,
-        'normal_fuerza': 2.0
+    'ladrillo': {  # muro de ladrillo del vecino, a la izquierda del portón (foto 4)
+        'foto': 'foto-4.jpg', 'original': 'IMG_2446.jpeg', 'tamano': (4032, 3024),
+        'caja': (110, 1628, 214, 1732), 'escala_m': 2.0, 'normal_fuerza': 1.4,
     },
-    'techo': {
-        'foto': 'foto-3.jpg',
-        'caja': (520, 440, 720, 560),
-        'escala_m': 1.0,
-        'normal_fuerza': 2.8
+    'cesped': {  # césped del frente (foto 2 original, 3024x4032)
+        'foto': 'foto-2.jpg', 'original': 'IMG_2444.jpeg', 'tamano': (3024, 4032),
+        'caja': (700, 3100, 1500, 3900), 'escala_m': 2.5, 'normal_fuerza': 1.0,
     },
-    'ladrillo': {
-        'foto': 'foto-8.jpg',
-        'caja': (1220, 520, 1420, 680),
-        'escala_m': 0.8,
-        'normal_fuerza': 2.2
+    'tierra': {  # tierra colorada del frente (foto 3)
+        'foto': 'foto-3.jpg', 'original': 'IMG_2445.jpeg', 'tamano': (4032, 3024),
+        'caja': (2150, 2270, 2500, 2620), 'escala_m': 1.5, 'normal_fuerza': 1.2,
     },
-    'hormigon': {
-        'foto': 'foto-4.jpg',
-        'caja': (760, 460, 940, 640),
-        'escala_m': 1.0,
-        'normal_fuerza': 1.5
-    },
-    'cesped': {
-        'foto': 'foto-2.jpg',
-        'caja': (180, 950, 500, 1180),
-        'escala_m': 2.0,
-        'normal_fuerza': 1.2
-    },
-    'tierra': {
-        'foto': 'foto-2.jpg',
-        'caja': (300, 1260, 650, 1450),
-        'escala_m': 2.0,
-        'normal_fuerza': 1.4
-    }
 }
+
+
+def abrir_foto(cfg):
+    """Abre la foto original (rotada según EXIF) o, si falta, la copia reducida con la caja escalada."""
+    original = os.path.join(ORIGINALES_DIR, cfg['original'])
+    if os.path.exists(original):
+        return ImageOps.exif_transpose(Image.open(original)), 1.0
+    reducida = os.path.join(FOTOS_DIR, cfg['foto'])
+    if not os.path.exists(reducida):
+        return None, 1.0
+    im = ImageOps.exif_transpose(Image.open(reducida))
+    return im, im.size[0] / cfg['tamano'][0]
+
 
 def hacer_seamless(img, margen_ratio=0.18):
     """Convierte una imagen en mosaico continuo (seamless tileable) mediante fundido cruzado."""
@@ -134,33 +122,20 @@ def main():
     TAMANIO = 512
 
     for nombre, cfg in MATERIALES.items():
-        ruta_foto = os.path.join(FOTOS_DIR, cfg['foto'])
-        if not os.path.exists(ruta_foto):
-            print(f"[!] Foto no encontrada: {ruta_foto}")
+        im, factor = abrir_foto(cfg)
+        if im is None:
+            print(f"[!] Foto no encontrada para {nombre}: {cfg['original']} / {cfg['foto']}")
             continue
-
-        im = Image.open(ruta_foto)
-        caja = cfg['caja']
-        recorte = im.crop(caja)
-
-        # Redimensionar a tamaño cuadrado estándar de potencia de dos
-        recorte = recorte.resize((TAMANIO, TAMANIO), Image.Resampling.LANCZOS)
-
-        # Hacer seamless
+        caja = tuple(int(round(v * factor)) for v in cfg['caja'])
+        recorte = im.crop(caja).resize((TAMANIO, TAMANIO), Image.Resampling.LANCZOS)
         diffuse = hacer_seamless(recorte)
+        diffuse.save(os.path.join(OUTPUT_DIR, f"{nombre}.jpg"), quality=88, optimize=True)
+        normal = generar_mapa_normales(diffuse.filter(ImageFilter.GaussianBlur(1.2)), fuerza=cfg['normal_fuerza'])
+        normal.save(os.path.join(OUTPUT_DIR, f"{nombre}_normal.jpg"), quality=85, optimize=True)
+        origen = 'original' if factor == 1.0 else f'reducida x{factor:.2f}'
+        print(f"✓ {nombre}: {cfg['original']} ({origen}) caja {caja} -> {nombre}.jpg + {nombre}_normal.jpg")
 
-        # Guardar textura difusa
-        ruta_diffuse = os.path.join(OUTPUT_DIR, f"{nombre}.jpg")
-        diffuse.save(ruta_diffuse, quality=90, optimize=True)
-
-        # Generar y guardar mapa de normales
-        normal = generar_mapa_normales(diffuse, fuerza=cfg['normal_fuerza'])
-        ruta_normal = os.path.join(OUTPUT_DIR, f"{nombre}_normal.jpg")
-        normal.save(ruta_normal, quality=90, optimize=True)
-
-        print(f"✓ {nombre}: extraído de {cfg['foto']} -> {nombre}.jpg + {nombre}_normal.jpg (512x512)")
-
-    print("=== Extracción completada exitosamente ===")
+    print("=== Extracción completada ===")
 
 if __name__ == '__main__':
     main()

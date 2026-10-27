@@ -296,6 +296,26 @@ Esto es lo que las fotos muestran y un escaneo hecho desde el césped probableme
 
 ---
 
+## Correcciones después de calibrar la maqueta contra las 13 fotos (`visor/comparar.html`)
+
+Las medidas vigentes están en `visor/js/medidas.js`; esto es lo que cambió respecto de lo escrito más arriba:
+
+1. **El techo no es de una sola agua:** las fotos 3, 10, 11 y 12 muestran una cumbrera a ~3,8 m del plano de la
+   fachada suroeste (en b), con el faldón suroeste suave (~30 %) y el noreste más empinado (~48 %). La chimenea
+   va a caballo de esa cumbrera, a unos 7 m de la esquina sur, y el pretil blanco de la pared noroeste sube
+   ~0,45 m por encima de la chapa con una tapa negra que sigue el mismo perfil.
+2. **El portal del hastial** es una losa pentagonal de ~1 m de fondo que sobresale 0,25 m del plano de la fachada:
+   pilares de 4,1 m, pico de 5,2 m sobre la franja negra, banda superior de 0,7 m, pilar suroeste de 0,95 m y
+   noreste de 0,6 m. De sur a este: vidrio 1,15–3,1 m (retranqueado 0,4 m, puerta de 2,4 m y paño fijo
+   trapezoidal), franja negra 3,1–4,35 m, piedra 4,35–5,65 m con los dos faroles a 2,3 m sobre el piso.
+3. **Ventanal** de 4,2 m (a = 1,75–5,95 desde la esquina sur) y 2,2 m de alto; **puerta-ventana** del dormitorio
+   de 1,95 m (a = 6,6–8,55) y 2,1 m; faroles de la fachada en a = 1,62 / 6,28 / 8,85 a 2,0 m sobre el piso.
+4. **Terraza** 0,35 m por debajo del piso interior (dos escalones de 0,12 m más el umbral), con 2 m de fondo
+   frente a la fachada suroeste y 2,6 m frente al portal, y escalones más anchos abajo que arriba.
+5. **FOV de las fotos:** sale del EXIF (14, 16, 24 o 28 mm equivalentes), no de un valor fijo; está en `js/lugares.js`.
+6. **Fotos nuevas:** 11 (hastial de cerca, 16 mm), 12 (ventanal y chimenea, 28 mm) y 13 (fachada de noche con los
+   seis faroles encendidos: confirma su posición y que el farol de la pared noroeste existe).
+
 ## Los 5 detalles que más pesan para que se vea fiel
 
 1. **El hastial:** marco blanco rugoso en forma de casita, con vidrio retranqueado, franja negra acanalada y panel de piedra laja crema con dos faroles. Es lo que identifica a la casa desde la calle.

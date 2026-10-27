@@ -14,7 +14,7 @@ export function crearLuces(escena) {
   escena.fog = new THREE.Fog(COLOR_CIELO, 90, 220);
   escena.add(new THREE.HemisphereLight(0xdfeeff, 0x8d8a76, 1.6));
   const sol = new THREE.DirectionalLight(0xfff3dd, 2.6);
-  sol.position.set(18, 32, 22);
+  sol.position.set(-8, 34, 24);   // sol alto desde el sur-suroeste del plano: ilumina la fachada vidriada y el frente de piedra (ficha, sección Luz)
   sol.castShadow = true;
   sol.shadow.mapSize.set(2048, 2048);
   sol.shadow.camera.left = sol.shadow.camera.bottom = -RADIO_SOMBRA;

@@ -21,6 +21,7 @@ Luego abre en el navegador:
 - **Página principal / Menú:** [http://localhost:8080/](http://localhost:8080/)
 - **Recorrido 3D en primera persona:** [http://localhost:8080/visor/index.html](http://localhost:8080/visor/index.html)
 - **Maqueta 3D volumétrica:** [http://localhost:8080/visor/maqueta.html](http://localhost:8080/visor/maqueta.html)
+- **Calibrador maqueta ↔ fotos:** [http://localhost:8080/visor/comparar.html?foto=6](http://localhost:8080/visor/comparar.html?foto=6)
 
 ---
 
@@ -35,8 +36,8 @@ Luego abre en el navegador:
   - Pulgar derecho: rotación de cámara.
 - **Mini plano:** haz clic en cualquier punto caminable para volar automáticamente allí.
 - **Destinos rápidos:** Calle, Portón, Galería, Sala, Dormitorio, Baño y Arboleda.
-- **Comparador con fotos reales:** transporta la cámara al ángulo exacto de cada toma (10 fotos) con control de opacidad (3D ↔ Foto) o vistas asistidas por IA.
-- **Completar casa:** activa un modelo paramétrico Three.js que rellena paredes, aberturas, techo con alero, vigas y hastial de piedra en las zonas no captadas por el escaneo.
+- **Comparador con fotos reales:** transporta la cámara al ángulo exacto de cada toma (13 fotos) con control de opacidad (3D ↔ Foto) o vistas asistidas por IA.
+- **Completar casa:** activa un modelo paramétrico Three.js, calibrado foto por foto con `visor/comparar.html`, que rellena paredes, aberturas, techo con cenefa y vigas, chimenea, portal pentagonal con piedra y terraza con escalones en las zonas no captadas por el escaneo.
 - **Cargar .PLY:** botón en la cabecera o arrastrar directamente cualquier archivo `.ply` o `.ksplat` a la ventana.
 
 ---
@@ -77,11 +78,12 @@ El script verificará la integridad con la suma SHA-256 y creará `escaneo/casa.
 ├── visor/                       # Visor 3D Three.js + Gaussian Splatting
 │   ├── index.html               # Recorrido 3D en primera persona
 │   ├── maqueta.html             # Maqueta 3D volumétrica con OrbitControls
+│   ├── comparar.html            # Calibrador: maqueta superpuesta a cada foto
 │   ├── css/                     # Estilos de interfaz
 │   ├── datos/                   # Terreno caminable, mapa cenital, ficha técnica
-│   ├── fotos/                   # 10 fotos reales de referencia
+│   ├── fotos/                   # 13 fotos reales de referencia
 │   ├── ia/                      # Renders completados con IA
-│   ├── js/                      # Lógica de Three.js, controles, modelo, terreno
+│   ├── js/                      # Three.js: controles, medidas.js (todas las medidas), modelo + casa-*.js + entorno.js, terreno
 │   ├── lib/                     # three.module.js, gaussian-splats-3d.module.js
 │   ├── modelo/                  # casa.ksplat (10.8 MB optimizado)
 │   └── renders/                 # Renders base para comparación
@@ -89,7 +91,10 @@ El script verificará la integridad con la suma SHA-256 y creará `escaneo/casa.
     ├── clean_ply.py             # Limpia outliers y splats transparentes
     ├── convert.mjs              # Convierte .ply a .ksplat comprimido
     ├── terrain.py               # Genera grilla caminable (terreno.json)
-    └── minimapa.py              # Genera mapa cenital (mapa.png)
+    ├── minimapa.py              # Genera mapa cenital (mapa.png)
+    ├── extraer_texturas.py      # Recorta texturas (piedra, madera, ladrillo…) de las fotos originales
+    ├── render-vistas.mjs        # Renderiza la maqueta desde la pose de cada foto (Playwright)
+    └── verificar-paginas.mjs    # Abre las tres páginas sin cabeza y falla si hay errores
 ```
 
 ---
@@ -102,4 +107,9 @@ npm run clean:ply
 
 # Convertir a .ksplat optimizado de alta velocidad:
 npm run convert:ksplat
+
+# Renderizar la maqueta desde las poses de las fotos y verificar las páginas (requiere Playwright):
+npm i -D playwright && npx playwright install chromium
+npm run render:vistas -- --fotos 1,6,11
+npm run verificar
 ```

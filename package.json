@@ -1,6 +1,6 @@
 {
   "name": "angular-maps-3d-casa",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Simulación y recorrido 3D del lote y casa con Three.js y Gaussian Splatting (.ply / .ksplat), junto con mapa interactivo",
   "main": "visor/index.html",
   "scripts": {
@@ -9,7 +9,9 @@
     "assemble:ply": "./escaneo/unir-ply.sh",
     "extract:textures": "python3 herramientas/extraer_texturas.py",
     "clean:ply": "python3 herramientas/clean_ply.py escaneo/casa.ply escaneo/casa_limpio.ply",
-    "convert:ksplat": "node herramientas/convert.mjs escaneo/casa_limpio.ply visor/modelo/casa.ksplat 1 5 0"
+    "convert:ksplat": "node herramientas/convert.mjs escaneo/casa_limpio.ply visor/modelo/casa.ksplat 1 5 0",
+    "render:vistas": "node herramientas/render-vistas.mjs",
+    "verificar": "node herramientas/verificar-paginas.mjs"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,9 @@
   "dependencies": {
     "@mkkellogg/gaussian-splats-3d": "^0.4.7",
     "three": "^0.160.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "playwright": "^1.64.1"
   }
 }
