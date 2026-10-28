@@ -63,6 +63,9 @@ export const MEDIDAS = {
     tabiqueLargo: 3.4,       // b del tabique entre el dormitorio y el baño
   },
 
+  // Lote de 24 x 30 m, alineado con la calle (frente sobre z = 9.5, fondo hacia -Z). El tejido va por todo el perímetro.
+  lote: { x0: -7, x1: 17, zFrente: 9.5, zFondo: -20.5 },
+
   // Terraza: fondo frente a la fachada suroeste y frente al portal.
   terraza: { fondoSO: 2.0, fondoSE: 2.6, pasadaOeste: 0.4, hastaMuroE: 6.8, franjaNO: 0.6 },
 };

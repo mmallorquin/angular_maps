@@ -29,6 +29,10 @@ function alambrado(h, grupo, desde, hasta) {
   const malla = h.bloque(grupo, 'alambre', 0, largo, 0.05, ALTO_ALAMBRADO, -0.005, 0.005);
   malla.position.copy(desde).add(d.clone().multiplyScalar(0.5)).setY(M.nivelSuelo + ALTO_ALAMBRADO / 2);
   malla.rotation.y = angulo;
+  // Alambre tensor superior: hace visible el cerco también de lejos, donde el tejido se vuelve transparente.
+  const tensor = h.bloque(grupo, 'acero', 0, largo, -0.015, 0.015, -0.015, 0.015);
+  tensor.position.copy(malla.position).setY(M.nivelSuelo + ALTO_ALAMBRADO);
+  tensor.rotation.y = angulo;
   const postes = Math.max(1, Math.round(largo / PASO_POSTES));
   for (let i = 0; i <= postes; i++) {
     const p = desde.clone().add(d.clone().multiplyScalar(i / postes));
@@ -48,10 +52,14 @@ export function construirPorton(h) {
   h.bloque(p, 'madera', 2.65, 3.45, M.nivelSuelo + 0.05, M.nivelSuelo + 2.2, z - 0.03, z + 0.03);
   pilar(3.75, 0.45, 2.4);
   h.bloque(p, 'hormigon', 3.5, 4.3, M.nivelSuelo + 2.4, M.nivelSuelo + 2.5, z - 0.3, z + 0.3);
-  // Alambrado sobre la línea de calle y por los costados.
-  alambrado(h, p, new THREE.Vector3(4.0, 0, z), new THREE.Vector3(21, 0, z));
-  alambrado(h, p, new THREE.Vector3(-1.4, 0, z), new THREE.Vector3(-9, 0, z));
-  alambrado(h, p, new THREE.Vector3(21, 0, z), new THREE.Vector3(21, 0, -18));
+  // Tejido romboidal por todo el perímetro del lote, salvo el vano del portón.
+  const L = M.lote;
+  const v = (x, zz) => new THREE.Vector3(x, 0, zz);
+  alambrado(h, p, v(4.0, z), v(L.x1, z));
+  alambrado(h, p, v(-1.4, z), v(L.x0, z));
+  alambrado(h, p, v(L.x1, z), v(L.x1, L.zFondo));
+  alambrado(h, p, v(L.x0, z), v(L.x0, L.zFondo));
+  alambrado(h, p, v(L.x0, L.zFondo), v(L.x1, L.zFondo));
   // Entrada de autos de tierra compactada.
   const entrada = h.bloque(p, 'tierra', 0.7, 3.5, M.nivelSuelo - 0.02, M.nivelSuelo + 0.01, z - 4.5, z + 0.5);
   entrada.receiveShadow = true;
@@ -62,7 +70,6 @@ export function construirPorton(h) {
 export function construirMurosVecinos(h) {
   const m = new THREE.Group();
   m.name = 'muros';
-  const angulo = Math.atan2(-M.direccionFachada.z, M.direccionFachada.x);
   // Este, junto al hastial: bloques revocados con manchas y un tramo de ladrillo; parabólica arriba.
   const este = new THREE.Group();
   h.bloque(este, 'revoqueViejo', -0.5, 3.4, M.nivelSuelo, M.nivelSuelo + 2.3, -0.1, 0.1);
@@ -72,20 +79,19 @@ export function construirMurosVecinos(h) {
   plato.position.set(2.0, M.nivelSuelo + 3.3, -0.1);
   plato.rotation.y = Math.PI;
   este.add(plato);
-  este.position.set(16.4, 0, -4.6);
-  este.rotation.y = angulo;
+  este.position.set(M.lote.x1 + 0.3, 0, -3.2);   // del lado de afuera del tejido este, paralelo al límite del lote
+  este.rotation.y = Math.PI / 2;
   m.add(este);
   // Norte y noroeste: ladrillo visto a medio hacer, pegado al extremo noroeste de la casa.
   const norte = h.bloque(m, 'ladrillo', -7, 7, M.nivelSuelo, M.nivelSuelo + 2.0, -0.1, 0.1);
-  norte.position.set(7.5, 0, -21.5);
-  norte.rotation.y = angulo + Math.PI / 2;
+  norte.position.set(5, 0, M.lote.zFondo - 0.4);   // detrás del tejido del fondo
   for (let i = -2; i <= 2; i++) {
     const pilar = h.bloque(m, 'hormigon', -0.15, 0.15, M.nivelSuelo, M.nivelSuelo + 2.2, -0.15, 0.15);
-    pilar.position.set(7.5 + i * 3.0 * Math.cos(angulo + Math.PI / 2), 0, -21.5 - i * 3.0 * Math.sin(angulo + Math.PI / 2));
+    pilar.position.set(5 + i * 3.0, 0, M.lote.zFondo - 0.4);
   }
   // Oeste, a lo largo del lado hacia la calle (ladrillo detrás del alambrado).
   const oeste = h.bloque(m, 'ladrillo', -12, 12, M.nivelSuelo, M.nivelSuelo + 2.0, -0.1, 0.1);
-  oeste.position.set(-9.5, 0, -4);
+  oeste.position.set(M.lote.x0 - 0.4, 0, -4);   // detrás del tejido oeste
   oeste.rotation.y = Math.PI / 2;
   // Este lejano: muro gris azulado detrás del alambrado.
   const esteLejano = h.bloque(m, 'revoqueGris', -8, 8, M.nivelSuelo, M.nivelSuelo + 1.9, -0.1, 0.1);
@@ -114,8 +120,7 @@ export function construirSuelo(mat) {
     tierra.receiveShadow = true;
     s.add(tierra);
   };
-  parche(9.5, 4.5, 9, 7, 0.3);       // entre el portón y el hastial
-  parche(-1, -11, 9, 10, 0.2);       // suelo pelado bajo la arboleda
+  parche(7.5, 5.0, 6, 5, 0.3);       // entrada de autos entre el portón y el hastial
   // Montículo de arena cerca del frente.
   const arena = new THREE.Mesh(new THREE.SphereGeometry(1.6, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat('arena'));
   arena.scale.set(1, 0.25, 1);

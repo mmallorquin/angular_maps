@@ -27,21 +27,19 @@ export function crearLuces(escena) {
   return sol;
 }
 
-/** Contorno del lote (24 x 30 m) alineado con la casa; posición aproximada: el portón queda sobre el frente. */
+/** Contorno del lote (24 x 30 m) alineado con la calle; las esquinas salen de MEDIDAS.lote. */
 export function crearLote() {
-  const u = new THREE.Vector3(MEDIDAS.direccionFachada.x, 0, MEDIDAS.direccionFachada.z).normalize();   // hacia el fondo
-  const v = new THREE.Vector3(-u.z, 0, u.x);   // a lo largo del frente, hacia el este
-  const frente = 24;
-  const fondo = 30;
-  const p0 = new THREE.Vector3(2, MEDIDAS.nivelSuelo + 0.03, 9.5).addScaledVector(v, -4);   // esquina suroeste (calle)
-  const esquinas = [p0, p0.clone().addScaledVector(v, frente), p0.clone().addScaledVector(v, frente).addScaledVector(u, fondo), p0.clone().addScaledVector(u, fondo), p0];
+  const L = MEDIDAS.lote;
+  const y = MEDIDAS.nivelSuelo + 0.03;
+  const p0 = new THREE.Vector3(L.x0, y, L.zFrente);
+  const esquinas = [p0, new THREE.Vector3(L.x1, y, L.zFrente), new THREE.Vector3(L.x1, y, L.zFondo), new THREE.Vector3(L.x0, y, L.zFondo), p0];
   const geo = new THREE.BufferGeometry().setFromPoints(esquinas);
   const linea = new THREE.Line(geo, new THREE.LineDashedMaterial({ color: 0xfff0a0, dashSize: 0.8, gapSize: 0.4, linewidth: 2 }));
   linea.computeLineDistances();
   const grupo = new THREE.Group();
   grupo.name = 'lote';
   grupo.add(linea);
-  grupo.userData.centro = p0.clone().addScaledVector(v, frente / 2).addScaledVector(u, fondo / 2);
+  grupo.userData.centro = new THREE.Vector3((L.x0 + L.x1) / 2, y, (L.zFrente + L.zFondo) / 2);
   grupo.userData.esquinas = esquinas.slice(0, 4);
   return grupo;
 }
@@ -135,7 +133,7 @@ export function crearEtiquetas(lote) {
     ['Muro vecino', new THREE.Vector3(18.5, 3.2, -0.5)],
   ];
   for (const [texto, pos] of items) g.add(crearEtiqueta(texto, pos, { tamanio: texto.length > 10 ? 0.75 : 0.9 }));
-  if (lote) g.add(crearEtiqueta('Lote 24 × 30 m (aprox.)', lote.userData.centro.clone().setY(0.8), { tamanio: 0.8, color: '#fff0a0' }));
+  if (lote) g.add(crearEtiqueta('Lote 24 × 30 m', lote.userData.centro.clone().setY(0.8), { tamanio: 0.8, color: '#fff0a0' }));
   return g;
 }
 

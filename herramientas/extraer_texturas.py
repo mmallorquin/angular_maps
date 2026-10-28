@@ -35,10 +35,6 @@ MATERIALES = {
         'foto': 'foto-4.jpg', 'original': 'IMG_2446.jpeg', 'tamano': (4032, 3024),
         'caja': (110, 1628, 214, 1732), 'escala_m': 2.0, 'normal_fuerza': 1.4,
     },
-    'cesped': {  # césped del frente (foto 2 original, 3024x4032)
-        'foto': 'foto-2.jpg', 'original': 'IMG_2444.jpeg', 'tamano': (3024, 4032),
-        'caja': (700, 3100, 1500, 3900), 'escala_m': 2.5, 'normal_fuerza': 1.0,
-    },
     'tierra': {  # tierra colorada del frente (foto 3)
         'foto': 'foto-3.jpg', 'original': 'IMG_2445.jpeg', 'tamano': (4032, 3024),
         'caja': (2150, 2270, 2500, 2620), 'escala_m': 1.5, 'normal_fuerza': 1.2,

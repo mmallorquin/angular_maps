@@ -21,7 +21,7 @@ export const COLORES = {
 
 const DESPLAZAMIENTO_PROFUNDIDAD = { factor: 1.5, unidades: 30000 };
 const TAMANIO_LIENZO = 256;
-const TINTE_TEXTURA = { techo: 0xb4b8bc, cesped: 0xd9e4cc };   // la chapa sale clara por el reflejo del cielo
+const TINTE_TEXTURA = { techo: 0xb4b8bc };   // la chapa sale clara por el reflejo del cielo
 
 function hex(c) {
   return `#${c.toString(16).padStart(6, '0')}`;
@@ -63,6 +63,18 @@ function ruido(ctx, n, base, amplitud, cantidad = 1500, radio = 3) {
 }
 
 const DIBUJOS = {
+  cesped: (ctx, n) => {                      // césped parejo: verde con brotes claros y oscuros, mosaico de 2,5 m
+    ruido(ctx, n, COLORES.cesped, 0.1, 6000, 1.2);
+    for (let i = 0; i < 900; i++) {
+      ctx.strokeStyle = mezclar(COLORES.cesped, (Math.random() - 0.4) * 0.22);
+      ctx.lineWidth = 1;
+      const x = Math.random() * n; const y = Math.random() * n;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + (Math.random() - 0.5) * 6, y - 3 - Math.random() * 6);
+      ctx.stroke();
+    }
+  },
   pared: (ctx, n) => ruido(ctx, n, COLORES.pared, 0.04, 2500, 1.5),
   interior: (ctx, n) => ruido(ctx, n, COLORES.interior, 0.03, 1200, 2),
   revoqueViejo: (ctx, n) => ruido(ctx, n, COLORES.revoqueViejo, 0.18, 2500, 4),
@@ -140,7 +152,7 @@ const METROS_POR_MOSAICO = {
   techoGalpon: 1.0, alambre: 0.5,
 };
 
-const TEXTURAS_FOTO = new Set(['piedra', 'madera', 'ladrillo', 'hormigon', 'cesped', 'tierra']);
+const TEXTURAS_FOTO = new Set(['piedra', 'madera', 'ladrillo', 'hormigon', 'tierra']);
 const CON_NORMALES = new Set(['piedra', 'madera', 'ladrillo']);
 const RUGOSIDAD = { techo: 0.55, piso: 0.35, vidrio: 0.15, granito: 0.3, acero: 0.3, heladera: 0.4, farol: 0.6, marco: 0.5, cenefa: 0.5, interior: 0.6 };
 const METALICIDAD = { techo: 0.1, acero: 0.8, vidrio: 0.2, farol: 0.3, marco: 0.3 };
