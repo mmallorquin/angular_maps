@@ -11,16 +11,16 @@ import * as THREE from 'three';
 
 export const COLORES = {
   pared: 0xeeeeea, cielorraso: 0xd8dadb, techo: 0x50555b, piedra: 0xcdbba0, piso: 0xe9dcc0,
-  interior: 0xe6e3dc, marco: 0x17181a, vidrio: 0x2f3d4a, viga: 0x1a1a1a, madera: 0x837d72,
+  interior: 0xe6e3dc, marco: 0x17181a, vidrio: 0x7d93a6, viga: 0x1a1a1a, madera: 0x837d72,
   hormigon: 0x9b9a92, chapaNegra: 0x1c1e21, ladrillo: 0xa4573f, cesped: 0x5c9a3a, tierra: 0x9e4a2e,
   farol: 0x111111, agua: 0x3fa4c9, mortero: 0x8d8678, cenefa: 0x15171a, zocalo: 0xcfc8b8,
   vidrioEsmerilado: 0xbfc8cc, farolVidrio: 0xfff1c8, granito: 0x48494c, heladera: 0xf2f2f0,
   acero: 0xb9bcc0, cobertor: 0xd8b648, cortina: 0x98a9b3, revoqueViejo: 0x9a958a, revoqueGris: 0x727c88,
-  antena: 0xf4f4f4, arena: 0xd8c7a3, techoGalpon: 0x6b7076, alambre: 0xaeb3b6,
+  antena: 0xf4f4f4, arena: 0xd8c7a3, techoGalpon: 0x6b7076, alambre: 0xaeb3b6, tierraLisa: 0xa8674d,
 };
 
 const DESPLAZAMIENTO_PROFUNDIDAD = { factor: 1.5, unidades: 30000 };
-const TAMANIO_LIENZO = 256;
+const TAMANIO_LIENZO = 512;
 const TINTE_TEXTURA = { techo: 0xb4b8bc };   // la chapa sale clara por el reflejo del cielo
 
 function hex(c) {
@@ -63,18 +63,19 @@ function ruido(ctx, n, base, amplitud, cantidad = 1500, radio = 3) {
 }
 
 const DIBUJOS = {
-  cesped: (ctx, n) => {                      // césped parejo: verde con brotes claros y oscuros, mosaico de 2,5 m
-    ruido(ctx, n, COLORES.cesped, 0.1, 6000, 1.2);
-    for (let i = 0; i < 900; i++) {
-      ctx.strokeStyle = mezclar(COLORES.cesped, (Math.random() - 0.4) * 0.22);
+  cesped: (ctx, n) => {                      // césped parejo: solo grano fino (de lejos se funde en un verde uniforme), mosaico de 3 m
+    ruido(ctx, n, COLORES.cesped, 0.08, 9000, 1.0);
+    for (let i = 0; i < 1800; i++) {
+      ctx.strokeStyle = mezclar(COLORES.cesped, (Math.random() - 0.5) * 0.14);
       ctx.lineWidth = 1;
       const x = Math.random() * n; const y = Math.random() * n;
       ctx.beginPath();
       ctx.moveTo(x, y);
-      ctx.lineTo(x + (Math.random() - 0.5) * 6, y - 3 - Math.random() * 6);
+      ctx.lineTo(x + (Math.random() - 0.5) * 5, y - 3 - Math.random() * 5);
       ctx.stroke();
     }
   },
+  tierraLisa: (ctx, n) => ruido(ctx, n, COLORES.tierraLisa, 0.1, 6000, 1.5),   // calle y entrada vistas de lejos
   pared: (ctx, n) => ruido(ctx, n, COLORES.pared, 0.04, 2500, 1.5),
   interior: (ctx, n) => ruido(ctx, n, COLORES.interior, 0.03, 1200, 2),
   revoqueViejo: (ctx, n) => ruido(ctx, n, COLORES.revoqueViejo, 0.18, 2500, 4),
@@ -147,16 +148,17 @@ const DIBUJOS = {
 };
 
 const METROS_POR_MOSAICO = {
-  piso: 1.2, ladrillo: 2.0, cesped: 2.5, tierra: 1.5, piedra: 1.1, pared: 0.8, madera: 1.3, techo: 1.0,
+  piso: 1.2, ladrillo: 2.0, cesped: 3.0, tierraLisa: 3.0, tierra: 1.5, piedra: 1.1, pared: 0.8, madera: 1.3, techo: 1.0,
   hormigon: 0.45, chapaNegra: 1.0, interior: 1.5, revoqueViejo: 1.5, revoqueGris: 1.5, arena: 1.0,
   techoGalpon: 1.0, alambre: 0.5,
 };
 
 const TEXTURAS_FOTO = new Set(['piedra', 'madera', 'ladrillo', 'hormigon', 'tierra']);
 const CON_NORMALES = new Set(['piedra', 'madera', 'ladrillo']);
-const RUGOSIDAD = { techo: 0.55, piso: 0.35, vidrio: 0.15, granito: 0.3, acero: 0.3, heladera: 0.4, farol: 0.6, marco: 0.5, cenefa: 0.5, interior: 0.6 };
-const METALICIDAD = { techo: 0.1, acero: 0.8, vidrio: 0.2, farol: 0.3, marco: 0.3 };
-const TRANSPARENTES = { vidrio: 0.55, vidrioEsmerilado: 0.7, agua: 0.8, alambre: 1.0, farolVidrio: 0.6 };
+const RUGOSIDAD = { techo: 0.55, piso: 0.35, vidrio: 0.04, granito: 0.3, acero: 0.3, heladera: 0.4, farol: 0.6, marco: 0.5, cenefa: 0.5, interior: 0.6 };
+const METALICIDAD = { techo: 0.1, acero: 0.8, vidrio: 0.85, farol: 0.3, marco: 0.3 };
+const INTENSIDAD_ENTORNO = { vidrio: 1.8, techo: 1.2, farol: 1.2, acero: 1.5 };
+const TRANSPARENTES = { vidrio: 0.62, vidrioEsmerilado: 0.7, agua: 0.8, alambre: 1.0, farolVidrio: 0.6 };
 
 const cargadorTexturas = new THREE.TextureLoader();
 
@@ -225,6 +227,7 @@ export function crearFabricaMateriales(modo = 'maqueta') {
         normalScale: new THREE.Vector2(0.7, 0.7),
         roughness: RUGOSIDAD[nombre] ?? 0.85,
         metalness: METALICIDAD[nombre] ?? 0,
+        envMapIntensity: INTENSIDAD_ENTORNO[nombre] ?? 1,
       });
     }
     cache.set(clave, m);

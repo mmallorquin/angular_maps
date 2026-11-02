@@ -63,8 +63,16 @@ export const MEDIDAS = {
     tabiqueLargo: 3.4,       // b del tabique entre el dormitorio y el baño
   },
 
-  // Lote de 24 x 30 m, alineado con la calle (frente sobre z = 9.5, fondo hacia -Z). El tejido va por todo el perímetro.
-  lote: { x0: -7, x1: 17, zFrente: 9.5, zFondo: -20.5 },
+  // Lote de 24 x 30 m en el marco local de la casa (a va de la calle hacia el fondo, b de izquierda a derecha
+  // mirando desde la calle). La casa queda a la derecha y cerca del frente; el portón a la izquierda, como en
+  // las fotos 4 y 5. El galpón y el portón salen del escaneo pasados a este marco.
+  lote: {
+    aFrente: -6.5, aFondo: 23.5, bIzq: -17.1, bDer: 6.9,
+    bPorton: -14.6,                               // extremo izquierdo del portón (5,5 m de ancho total)
+    galpon: { a: 0.35, b: -7.5, giro: -2.6 },
+    entrada: [[-6.5, -14.4], [-6.5, -9.3], [-2.2, -3.0], [-2.2, 0.5], [-4.0, -0.5], [-6.5, -9.0]],   // polígono (a, b)
+    arena: { a: -4.6, b: 2.0 },
+  },
 
   // Terraza: fondo frente a la fachada suroeste y frente al portal.
   terraza: { fondoSO: 2.0, fondoSE: 2.6, pasadaOeste: 0.4, hastaMuroE: 6.8, franjaNO: 0.6 },

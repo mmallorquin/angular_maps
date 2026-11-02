@@ -114,7 +114,7 @@ async function iniciar() {
   const renderer = crearRenderer(contenedor);
   const escena = new THREE.Scene();
   const camara = new THREE.PerspectiveCamera(pose.fov, contenedor.clientWidth / contenedor.clientHeight, 0.1, 400);
-  crearLuces(escena);
+  crearLuces(escena, renderer);
   const maqueta = crearMaqueta();
   escena.add(maqueta.grupo);
   if (params.get('arboles') !== '0') escena.add(crearArboles(Array.isArray(arbolesDatos.arboles) ? arbolesDatos.arboles : []));

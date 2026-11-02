@@ -1,22 +1,28 @@
 import * as THREE from 'three';
 import { MEDIDAS, anguloCasa, localAMundo } from './modelo.js';
+import { crearCupula, crearNubes, crearEntorno } from './cielo.js';
+export { crearArboles } from './arboles.js';
 
-/** Entorno de la maqueta: cielo, luces con sombra, lote, árboles y etiquetas. */
+/** Entorno de la maqueta: cielo, luces con sombra, lote y etiquetas (los árboles están en arboles.js). */
 
 const RADIO_SOMBRA = 40;
-const COLOR_CIELO = 0xcfe3f6;
-const COLOR_TRONCO = 0x6b5440;
-const COLOR_COPA = 0x4f8a3a;
-const COLOR_HOJA_PALMERA = 0x3e7d34;
+const COLOR_NIEBLA = 0xc9dcee;
+const DIRECCION_SOL = new THREE.Vector3(-8, 34, 24);   // sol alto desde el sur-suroeste del plano (ficha, sección Luz)
 
-export function crearLuces(escena) {
-  escena.background = new THREE.Color(COLOR_CIELO);
-  escena.fog = new THREE.Fog(COLOR_CIELO, 90, 220);
-  escena.add(new THREE.HemisphereLight(0xdfeeff, 0x8d8a76, 1.6));
-  const sol = new THREE.DirectionalLight(0xfff3dd, 2.6);
-  sol.position.set(-8, 34, 24);   // sol alto desde el sur-suroeste del plano: ilumina la fachada vidriada y el frente de piedra (ficha, sección Luz)
+/** Cielo, mapa de entorno (si hay renderer) y sol con sombras. */
+export function crearLuces(escena, renderer = null) {
+  escena.fog = new THREE.Fog(COLOR_NIEBLA, 120, 300);
+  escena.add(crearCupula(DIRECCION_SOL), crearNubes());
+  if (renderer) {
+    escena.environment = crearEntorno(renderer, DIRECCION_SOL);
+    escena.environmentIntensity = 0.7;
+  }
+  escena.add(new THREE.HemisphereLight(0xdfeeff, 0x8d8a76, renderer ? 0.6 : 1.6));
+  const sol = new THREE.DirectionalLight(0xfff3dd, 2.2);
+  sol.position.copy(DIRECCION_SOL);
   sol.castShadow = true;
-  sol.shadow.mapSize.set(2048, 2048);
+  sol.shadow.mapSize.set(4096, 4096);
+  sol.shadow.radius = 3;
   sol.shadow.camera.left = sol.shadow.camera.bottom = -RADIO_SOMBRA;
   sol.shadow.camera.right = sol.shadow.camera.top = RADIO_SOMBRA;
   sol.shadow.camera.near = 1;
@@ -27,66 +33,20 @@ export function crearLuces(escena) {
   return sol;
 }
 
-/** Contorno del lote (24 x 30 m) alineado con la calle; las esquinas salen de MEDIDAS.lote. */
+/** Contorno del lote (24 x 30 m) en el marco de la casa; las esquinas salen de MEDIDAS.lote. */
 export function crearLote() {
   const L = MEDIDAS.lote;
   const y = MEDIDAS.nivelSuelo + 0.03;
-  const p0 = new THREE.Vector3(L.x0, y, L.zFrente);
-  const esquinas = [p0, new THREE.Vector3(L.x1, y, L.zFrente), new THREE.Vector3(L.x1, y, L.zFondo), new THREE.Vector3(L.x0, y, L.zFondo), p0];
+  const esquinas = [[L.aFrente, L.bIzq], [L.aFrente, L.bDer], [L.aFondo, L.bDer], [L.aFondo, L.bIzq], [L.aFrente, L.bIzq]].map(([a, b]) => localAMundo(a, y, b));
   const geo = new THREE.BufferGeometry().setFromPoints(esquinas);
   const linea = new THREE.Line(geo, new THREE.LineDashedMaterial({ color: 0xfff0a0, dashSize: 0.8, gapSize: 0.4, linewidth: 2 }));
   linea.computeLineDistances();
   const grupo = new THREE.Group();
   grupo.name = 'lote';
   grupo.add(linea);
-  grupo.userData.centro = new THREE.Vector3((L.x0 + L.x1) / 2, y, (L.zFrente + L.zFondo) / 2);
+  grupo.userData.centro = localAMundo((L.aFrente + L.aFondo) / 2, y, (L.bIzq + L.bDer) / 2);
   grupo.userData.esquinas = esquinas.slice(0, 4);
   return grupo;
-}
-
-function crearArbol({ x, z, altura, radioCopa, tipo, vecino }) {
-  const g = new THREE.Group();
-  const troncoMat = new THREE.MeshStandardMaterial({ color: COLOR_TRONCO, roughness: 0.95 });
-  if (tipo === 'palmera') {
-    const tronco = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.28, altura - 1.5, 10), troncoMat);
-    tronco.position.y = (altura - 1.5) / 2;
-    tronco.castShadow = true;
-    g.add(tronco);
-    const hojaMat = new THREE.MeshStandardMaterial({ color: COLOR_HOJA_PALMERA, roughness: 0.8, side: THREE.DoubleSide });
-    for (let i = 0; i < 9; i++) {
-      const hoja = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.06, 0.7), hojaMat);
-      hoja.position.set(0, altura - 1.4, 0);
-      hoja.rotation.y = (i / 9) * Math.PI * 2;
-      hoja.rotation.z = -0.55;
-      hoja.translateX(1.4);
-      hoja.castShadow = true;
-      g.add(hoja);
-    }
-  } else {
-    const altoTronco = Math.min(3, altura * 0.4);
-    radioCopa = Math.min(2.4, Math.max(1.0, radioCopa * 0.6));   // copas más chicas para no tapar la maqueta
-    const tronco = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.2, altoTronco, 8), troncoMat);
-    tronco.position.y = altoTronco / 2;
-    tronco.castShadow = true;
-    g.add(tronco);
-    const copa = new THREE.Mesh(new THREE.SphereGeometry(radioCopa, 12, 10), new THREE.MeshStandardMaterial({
-      color: new THREE.Color(COLOR_COPA).offsetHSL((Math.random() - 0.5) * 0.04, 0, (Math.random() - 0.5) * 0.12), roughness: 0.9,
-      transparent: true, opacity: vecino ? 0.55 : 0.88,
-    }));
-    copa.scale.y = 0.85;
-    copa.position.y = Math.max(altoTronco + radioCopa * 0.7, altura * 0.65);
-    copa.castShadow = true;
-    g.add(copa);
-  }
-  g.position.set(x, MEDIDAS.nivelSuelo, z);
-  return g;
-}
-
-export function crearArboles(lista) {
-  const g = new THREE.Group();
-  g.name = 'arboles';
-  for (const a of lista) g.add(crearArbol(a));
-  return g;
 }
 
 /** Etiqueta flotante dibujada en un canvas (siempre mira a la cámara). */
@@ -125,27 +85,28 @@ export function crearEtiquetas(lote) {
     ['Sala · cocina', localAMundo(4.5, 1.9, 3.3)],
     ['Dormitorio', localAMundo(8.5, 1.9, 1.5)],
     ['Baño', localAMundo(8.5, 1.9, 4.8)],
-    ['Galpón', new THREE.Vector3(3.2, 3.4, 1.6)],
-    ['Portón', new THREE.Vector3(2.0, 3.2, 9.8)],
-    ['Calle', new THREE.Vector3(6, 1.6, 13.5)],
-    ['Tierra colorada', new THREE.Vector3(9.5, 1.2, 4.5)],
-    ['Arboleda', new THREE.Vector3(-2, 1.6, -7)],
-    ['Muro vecino', new THREE.Vector3(18.5, 3.2, -0.5)],
+    ['Galpón', localAMundo(MEDIDAS.lote.galpon.a, 3.4, MEDIDAS.lote.galpon.b)],
+    ['Portón', localAMundo(MEDIDAS.lote.aFrente, 3.2, MEDIDAS.lote.bPorton + 2.7)],
+    ['Calle', localAMundo(MEDIDAS.lote.aFrente - 4, 1.6, -4)],
+    ['Entrada de tierra', localAMundo(-4.5, 1.2, -8)],
+    ['Arboleda', localAMundo(13, 1.6, -5)],
+    ['Muro vecino', localAMundo(-1, 3.2, MEDIDAS.lote.bDer + 0.5)],
   ];
   for (const [texto, pos] of items) g.add(crearEtiqueta(texto, pos, { tamanio: texto.length > 10 ? 0.75 : 0.9 }));
   if (lote) g.add(crearEtiqueta('Lote 24 × 30 m', lote.userData.centro.clone().setY(0.8), { tamanio: 0.8, color: '#fff0a0' }));
   return g;
 }
 
-/** Puntos de vista predefinidos: [posición de cámara, objetivo]. */
+/** Puntos de vista predefinidos en el marco de la casa: [posición de cámara, objetivo]. */
 export function vistas() {
-  const centro = localAMundo(5.2, 1.5, 3.1);
-  const ang = anguloCasa();
+  const L = MEDIDAS.lote;
+  const centroLote = localAMundo((L.aFrente + L.aFondo) / 2, 0, (L.bIzq + L.bDer) / 2);
+  const centroCasa = localAMundo(5.2, 1.5, 3.1);
   return {
-    aerea: { posicion: new THREE.Vector3(26, 24, 26), objetivo: new THREE.Vector3(6, 0, -2) },
-    frente: { posicion: localAMundo(5, 2.2, -16), objetivo: centro },
-    calle: { posicion: new THREE.Vector3(14, 3, 20), objetivo: new THREE.Vector3(6, 1.5, 0) },
-    planta: { posicion: new THREE.Vector3(6, 55, -2.01), objetivo: new THREE.Vector3(6, 0, -2) },
-    angulo: ang,
+    aerea: { posicion: localAMundo(L.aFrente - 22, 26, L.bIzq - 10), objetivo: centroLote },
+    frente: { posicion: localAMundo(5, 2.2, -16), objetivo: centroCasa },
+    calle: { posicion: localAMundo(L.aFrente - 9, 3, -9), objetivo: localAMundo(3, 1.5, -1) },
+    planta: { posicion: centroLote.clone().setY(58).add(new THREE.Vector3(0.01, 0, 0)), objetivo: centroLote },
+    angulo: anguloCasa(),
   };
 }

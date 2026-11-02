@@ -110,7 +110,7 @@ async function iniciar() {
   orbita.maxDistance = 140;
   orbita.screenSpacePanning = false;
 
-  crearLuces(escena);
+  crearLuces(escena, renderer);
   const maqueta = crearMaqueta();
   escena.add(maqueta.grupo);
   const lote = crearLote();

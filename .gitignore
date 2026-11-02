@@ -23,3 +23,4 @@ yarn-error.log*
 visor/renders/maqueta/
 # Fotos originales a resolución completa (2-6 MB cada una; herramientas/extraer_texturas.py las busca en ../fotos-originales)
 fotos-originales/
+visor/renders/capturas/
